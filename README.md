@@ -1,26 +1,28 @@
-# Kurumsal CMS - Corporate Content Management System
+# Corporate CMS - Kurumsal İçerik Yönetim Sistemi
 
 Modern ASP.NET MVC (.NET 9) tabanlı kurumsal içerik yönetim sistemi.
 
-## 🚀 Özellikler
+**Live Demo:** https://github.com/emirhankalkan/corporate-cms-dotnet
+
+## Özellikler
 
 ### Temel Özellikler
-- ✅ **Sayfa Yönetimi**: Dinamik sayfa ekleme, düzenleme, silme
-- ✅ **Menü Yönetimi**: Hiyerarşik menü yapısı
-- ✅ **Slider Yönetimi**: Ana sayfa slider'ları
-- ✅ **Duyuru Sistemi**: Duyuru ekleme/düzenleme
-- ✅ **Kullanıcı Yetkilendirmesi**: Rol bazlı erişim kontrolü
+- **Sayfa Yönetimi**: Dinamik sayfa ekleme, düzenleme, silme
+- **Menü Yönetimi**: Hiyerarşik menü yapısı
+- **Slider Yönetimi**: Ana sayfa slider'ları
+- **Duyuru Sistemi**: Duyuru ekleme/düzenleme
+- **Kullanıcı Yetkilendirmesi**: Rol bazlı erişim kontrolü
 
 ### Teknik Özellikler
-- ✅ **ASP.NET MVC** (.NET 9) framework
-- ✅ **Entity Framework Core** ORM
-- ✅ **ASP.NET Identity** kimlik doğrulama
-- ✅ **SQLite** veritabanı (geliştirme için)
-- ✅ **Bootstrap 5** responsive tasarım
-- ✅ **TinyMCE** rich text editor
-- ✅ **Modern JavaScript** (ES6+)
+- **ASP.NET MVC** (.NET 9) framework
+- **Entity Framework Core** ORM
+- **ASP.NET Identity** kimlik doğrulama
+- **SQLite** veritabanı (geliştirme için)
+- **Bootstrap 5** responsive tasarım
+- **TinyMCE** rich text editor
+- **Modern JavaScript** (ES6+)
 
-## 🏗️ Sistem Mimarisi
+## Sistem Mimarisi
 
 ```
 CorporateCMS/
@@ -37,7 +39,7 @@ CorporateCMS/
     └── js/admin.js        # Admin panel JavaScript
 ```
 
-## 🎯 Kullanıcı Rolleri
+## Kullanıcı Rolleri
 
 | Rol | Açıklama | Yetkiler |
 |-----|----------|----------|
@@ -46,7 +48,7 @@ CorporateCMS/
 | **Editor** | İçerik editörü | İçerik oluşturma/düzenleme |
 | **Viewer** | Görüntüleyici | Sadece okuma yetkisi |
 
-## 🚀 Kurulum
+## Kurulum
 
 ### Gereksinimler
 - .NET 9 SDK
@@ -57,7 +59,7 @@ CorporateCMS/
 
 1. **Projeyi klonlayın**
 ```bash
-git clone <repository-url>
+git clone https://github.com/emirhankalkan/corporate-cms-dotnet.git
 cd CorporateCMS
 ```
 
@@ -81,7 +83,7 @@ dotnet run
 https://localhost:5001
 ```
 
-## 👤 Varsayılan Admin Kullanıcısı
+## Varsayılan Admin Kullanıcısı
 
 Sistem ilk çalıştığında otomatik olarak admin kullanıcısı oluşturulur:
 
@@ -89,7 +91,7 @@ Sistem ilk çalıştığında otomatik olarak admin kullanıcısı oluşturulur:
 - **Şifre**: Admin123!
 - **Rol**: SuperAdmin
 
-## 🎨 Admin Panel
+## Admin Panel
 
 Admin paneline erişim için:
 ```
@@ -97,13 +99,13 @@ https://localhost:5001/Admin
 ```
 
 ### Ana Özellikler
-- 📊 Dashboard - Sistem istatistikleri
-- 📄 Sayfa Yönetimi - İçerik oluşturma/düzenleme
-- 🧭 Menü Yönetimi - Site navigasyonu
-- 🖼️ Slider Yönetimi - Ana sayfa görselleri
-- 📢 Duyuru Yönetimi - Haberler ve duyurular
+- Dashboard - Sistem istatistikleri
+- Sayfa Yönetimi - İçerik oluşturma/düzenleme
+- Menü Yönetimi - Site navigasyonu
+- Slider Yönetimi - Ana sayfa görselleri
+- Duyuru Yönetimi - Haberler ve duyurular
 
-## 🔧 Geliştirme
+## Geliştirme
 
 ### Yeni Migration Oluşturma
 ```bash
@@ -121,7 +123,7 @@ dotnet build
 dotnet test
 ```
 
-## 🏷️ Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 
 - **Backend**: ASP.NET MVC (.NET 9), Entity Framework Core, ASP.NET Identity
 - **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript (ES6+)
@@ -129,8 +131,7 @@ dotnet test
 - **Editor**: TinyMCE Rich Text Editor
 - **İkonlar**: Font Awesome 6
 
-## 📝 API Endpoints
-
+## API Endpoints
 ### Admin Area
 ```
 GET  /Admin                    - Dashboard
@@ -146,15 +147,15 @@ GET  /                         - Ana sayfa
 GET  /{slug}                   - Dinamik sayfa görüntüleme
 ```
 
-## 🔒 Güvenlik
+## Güvenlik
 
-- ✅ CSRF Token koruması
-- ✅ SQL Injection koruması (EF Core)
-- ✅ XSS koruması (HTML encoding)
-- ✅ Rol bazlı yetkilendirme
-- ✅ Güvenli dosya yükleme
+- CSRF Token koruması
+- SQL Injection koruması (EF Core)
+- XSS koruması (HTML encoding)
+- Rol bazlı yetkilendirme
+- Güvenli dosya yükleme
 
-## 📈 Performans
+## Performans
 
 - Lazy loading
 - Output caching
@@ -162,7 +163,7 @@ GET  /{slug}                   - Dinamik sayfa görüntüleme
 - Minified CSS/JS
 - Database indexing
 
-## 🚀 Production Deployment
+## Production Deployment
 
 ### IIS Deployment
 1. Publish projeyi:
@@ -181,7 +182,7 @@ COPY publish/ .
 ENTRYPOINT ["dotnet", "CorporateCMS.dll"]
 ```
 
-## 🤝 Katkıda Bulunma
+## Katkıda Bulunma
 
 1. Fork edin
 2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
@@ -189,16 +190,10 @@ ENTRYPOINT ["dotnet", "CorporateCMS.dll"]
 4. Push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 📞 İletişim
-
-- **Geliştirici**: CorporateCMS Team
-- **Email**: info@kurumsalcms.com
-- **Website**: https://kurumsalcms.com
 
 ---
 
-**⚡ Kurumsal CMS** - Modern, güvenli ve ölçeklenebilir içerik yönetim sistemi
+**Corporate CMS** - Modern, güvenli ve ölçeklenebilir içerik yönetim sistemi
+
+**Repository:** https://github.com/emirhankalkan/corporate-cms-dotnet  
+**Developer:** Emirhan Kalkan
