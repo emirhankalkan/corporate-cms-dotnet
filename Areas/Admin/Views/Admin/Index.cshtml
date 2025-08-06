@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "Kontrol Paneli";
+}
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="h3 mb-4">Kontrol Paneli</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="stats-card">
+            <div class="stats-number">0</div>
+            <div class="stats-label">
+                <i class="fas fa-file-alt"></i>
+                Toplam Sayfa
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stats-number">0</div>
+            <div class="stats-label">
+                <i class="fas fa-bars"></i>
+                Menü Öğeleri
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stats-number">0</div>
+            <div class="stats-label">
+                <i class="fas fa-images"></i>
+                Slider Görselleri
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="stats-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stats-number">0</div>
+            <div class="stats-label">
+                <i class="fas fa-bullhorn"></i>
+                Duyurular
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Son Eklenen Sayfalar</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sayfa Adı</th>
+                                <th>Durum</th>
+                                <th>Oluşturulma</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    Henüz sayfa eklenmemiş.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Hızlı İşlemler</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/Admin/Pages/Create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Yeni Sayfa Ekle
+                    </a>
+                    <a href="/Admin/Menus/Create" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Yeni Menü Ekle
+                    </a>
+                    <a href="/Admin/Sliders/Create" class="btn btn-info">
+                        <i class="fas fa-plus"></i> Yeni Slider Ekle
+                    </a>
+                    <a href="/Admin/Announcements/Create" class="btn btn-warning">
+                        <i class="fas fa-plus"></i> Yeni Duyuru Ekle
+                    </a>
+                    <hr>
+                    <a href="/Admin/Admin/CreateSampleData" class="btn btn-outline-primary" 
+                       onclick="return confirm('Örnek veriler oluşturulsun mu?')">
+                        <i class="fas fa-database"></i> Örnek Veri Oluştur
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Sistem Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    <div class="mb-2">
+                        <strong>Kurumsal CMS</strong><br>
+                        Version: 1.0.0
+                    </div>
+                    <div class="mb-2">
+                        <strong>ASP.NET Core:</strong> .NET 9<br>
+                        <strong>Veritabanı:</strong> SQLite
+                    </div>
+                    <div>
+                        <strong>Son Güncelleme:</strong><br>
+                        @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                    </div>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

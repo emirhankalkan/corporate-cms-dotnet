@@ -1,0 +1,151 @@
+@model CorporateCMS.Models.Slider
+
+@{
+    ViewData["Title"] = "Slider Detayları";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-eye me-2"></i>
+                        Slider Detayları
+                    </h3>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th width="20%">Başlık:</th>
+                                    <td>@Model.Title</td>
+                                </tr>
+                                <tr>
+                                    <th>Açıklama:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.Description))
+                                        {
+                                            @Model.Description
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Bağlantı:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.Link))
+                                        {
+                                            <a href="@Model.Link" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-external-link-alt me-1"></i>
+                                                @Model.Link
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Buton Metni:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.ButtonText))
+                                        {
+                                            @Model.ButtonText
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Sıra No:</th>
+                                    <td>@Model.Order</td>
+                                </tr>
+                                <tr>
+                                    <th>Durum:</th>
+                                    <td>
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge bg-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Pasif</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Link Türü:</th>
+                                    <td>
+                                        @if (Model.OpenInNewTab)
+                                        {
+                                            <span class="badge bg-info">Yeni sekmede açılır</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary">Aynı sekmede açılır</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <h6>Slider Resmi</h6>
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <div class="text-center">
+                                    <img src="@Model.ImagePath" alt="@Model.Title" class="img-fluid img-thumbnail">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info text-center">
+                                    <i class="fas fa-image fa-2x"></i>
+                                    <p class="mb-0 mt-2">Resim yok</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h6>Sistem Bilgileri</h6>
+                            <table class="table table-sm table-borderless">
+                                <tr>
+                                    <th width="15%">Oluşturulma:</th>
+                                    <td>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                                <tr>
+                                    <th>Güncellenme:</th>
+                                    <td>@Model.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i>
+                        Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

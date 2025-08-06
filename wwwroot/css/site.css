@@ -1,0 +1,385 @@
+/* Base Styles */
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+
+/* Focus Styles */
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+
+/* Form Floating */
+
+.form-floating>.form-control-plaintext::placeholder,
+.form-floating>.form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating>.form-control-plaintext:focus::placeholder,
+.form-floating>.form-control:focus::placeholder {
+    text-align: start;
+}
+
+
+/* Custom CMS Styles */
+
+
+/* Hero Section */
+
+.hero-section {
+    position: relative;
+}
+
+.carousel-item img {
+    filter: brightness(0.8);
+}
+
+.carousel-caption {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+
+/* Cards */
+
+.card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+
+/* Buttons */
+
+.btn {
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border: none;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
+    border: none;
+}
+
+
+/* Navigation */
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+
+/* Footer */
+
+footer {
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+}
+
+
+/* List Group */
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+
+/* Alerts */
+
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+
+/* Admin Panel Styles */
+
+.admin-sidebar {
+    background: linear-gradient(180deg, #343a40 0%, #495057 100%);
+    min-height: calc(100vh - 56px);
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.admin-sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+
+/* Tables */
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+
+/* Forms */
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+
+/* Loading Animation */
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        display: none !important;
+    }
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}
+
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+}
+
+
+/* Utilities */
+
+.text-gradient {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-custom {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.border-gradient {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #007bff 0%, #0056b3 100%) 1;
+}
+
+
+/* Footer */
+
+.hover-opacity-100:hover {
+    opacity: 1 !important;
+    transition: opacity 0.3s ease;
+}
+
+
+/* Footer Enhancement */
+
+footer {
+    background: linear-gradient(135deg, #212529 0%, #343a40 100%) !important;
+    border-top: 1px solid #495057;
+}
+
+footer .text-light {
+    color: #ffffff !important;
+}
+
+footer .opacity-75 {
+    opacity: 1 !important;
+}
+
+footer .opacity-25 {
+    opacity: 0.4 !important;
+}
+
+footer a {
+    color: #e9ecef !important;
+}
+
+footer a:hover {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-decoration: underline !important;
+}
+
+footer h5 {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+footer p,
+footer small {
+    color: #e9ecef !important;
+}
+
+
+/* Additional Footer Fixes - Very Specific */
+
+footer .text-muted {
+    color: #ffffff !important;
+    opacity: 0.85 !important;
+}
+
+footer .container * {
+    color: #ffffff !important;
+}
+
+footer .container p,
+footer .container small,
+footer .container div {
+    color: #e3f2fd !important;
+}
+
+footer ul li a {
+    color: #e3f2fd !important;
+}
+
+footer .row * {
+    color: #e3f2fd !important;
+}

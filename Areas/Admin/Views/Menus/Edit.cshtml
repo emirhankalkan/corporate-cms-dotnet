@@ -1,0 +1,122 @@
+@model CorporateCMS.Models.Menu
+
+@{
+    ViewData["Title"] = "Menü Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-edit me-2"></i>
+                        Menü Düzenle
+                    </h3>
+                </div>
+                
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedDate" />
+                    
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Title" class="form-label">Menü Başlığı *</label>
+                                    <input asp-for="Title" class="form-control" placeholder="Menü başlığını girin">
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Url" class="form-label">URL</label>
+                                    <input asp-for="Url" class="form-control" placeholder="/sayfa-linki veya http://external.com">
+                                    <span asp-validation-for="Url" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="ParentId" class="form-label">Üst Menü</label>
+                                    <select asp-for="ParentId" class="form-control">
+                                        <option value="">Ana Menü</option>
+                                        @foreach (var parent in ViewBag.ParentMenus as List<CorporateCMS.Models.Menu>)
+                                        {
+                                            <option value="@parent.Id">@parent.Title</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Order" class="form-label">Sıra No</label>
+                                    <input asp-for="Order" type="number" class="form-control" min="0">
+                                    <span asp-validation-for="Order" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Durum</label>
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                        <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Icon" class="form-label">İkon (Font Awesome)</label>
+                                    <input asp-for="Icon" class="form-control" placeholder="fas fa-home">
+                                    <small class="form-text text-muted">Örnek: fas fa-home, fas fa-user</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="CssClass" class="form-label">CSS Sınıfı</label>
+                                    <input asp-for="CssClass" class="form-control" placeholder="custom-class">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Link Türü</label>
+                                    <div class="form-check">
+                                        <input asp-for="IsExternal" class="form-check-input" type="checkbox">
+                                        <label asp-for="IsExternal" class="form-check-label">Harici Link</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i>
+                            Güncelle
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

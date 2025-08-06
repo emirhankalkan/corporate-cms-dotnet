@@ -1,0 +1,206 @@
+@model CorporateCMS.Models.Menu
+
+@{
+    ViewData["Title"] = "Menü Detayları";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-eye me-2"></i>
+                        Menü Detayları
+                    </h3>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th width="30%">Menü Başlığı:</th>
+                                    <td>@Model.Title</td>
+                                </tr>
+                                <tr>
+                                    <th>URL:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.Url))
+                                        {
+                                            <code>@Model.Url</code>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Üst Menü:</th>
+                                    <td>
+                                        @if (Model.Parent != null)
+                                        {
+                                            @Model.Parent.Title
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Ana Menü</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Sıra No:</th>
+                                    <td>@Model.Order</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th width="30%">Durum:</th>
+                                    <td>
+                                        @if (Model.IsActive)
+                                        {
+                                            <span class="badge bg-success">Aktif</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Pasif</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Link Türü:</th>
+                                    <td>
+                                        @if (Model.IsExternal)
+                                        {
+                                            <span class="badge bg-info">Harici Link</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary">Dahili Link</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>İkon:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.Icon))
+                                        {
+                                            <i class="@Model.Icon me-2"></i>
+                                            <code>@Model.Icon</code>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>CSS Sınıfı:</th>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(Model.CssClass))
+                                        {
+                                            <code>@Model.CssClass</code>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Belirtilmemiş</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Sistem Bilgileri</h5>
+                            <table class="table table-sm table-borderless">
+                                <tr>
+                                    <th width="15%">Oluşturulma:</th>
+                                    <td>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    @if (Model.Children.Any())
+                    {
+                        <hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Alt Menüler</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sıra</th>
+                                                <th>Başlık</th>
+                                                <th>URL</th>
+                                                <th>Durum</th>
+                                                <th>İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var child in Model.Children.OrderBy(c => c.Order))
+                                            {
+                                                <tr>
+                                                    <td>@child.Order</td>
+                                                    <td>@child.Title</td>
+                                                    <td>
+                                                        @if (!string.IsNullOrEmpty(child.Url))
+                                                        {
+                                                            <code>@child.Url</code>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">-</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (child.IsActive)
+                                                        {
+                                                            <span class="badge bg-success">Aktif</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">Pasif</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a asp-action="Details" asp-route-id="@child.Id" class="btn btn-sm btn-info">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a asp-action="Edit" asp-route-id="@child.Id" class="btn btn-sm btn-warning">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i>
+                        Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

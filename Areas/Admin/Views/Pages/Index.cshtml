@@ -1,0 +1,108 @@
+@model IEnumerable<CorporateCMS.Models.Page>
+
+@{
+    ViewData["Title"] = "Sayfalar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Sayfalar</h1>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Yeni Sayfa Ekle
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Henüz sayfa eklenmemiş</h5>
+                <p class="text-muted">İlk sayfanızı oluşturmak için "Yeni Sayfa Ekle" butonuna tıklayın.</p>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Yeni Sayfa Ekle
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Başlık</th>
+                            <th>URL</th>
+                            <th>Durum</th>
+                            <th>Ana Sayfa</th>
+                            <th>Görüntülenme</th>
+                            <th>Oluşturulma</th>
+                            <th width="200">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@item.Title</strong>
+                                    @if (!string.IsNullOrEmpty(item.MetaDescription))
+                                    {
+                                        <br><small class="text-muted">@item.MetaDescription.Substring(0, Math.Min(80, item.MetaDescription.Length))...</small>
+                                    }
+                                </td>
+                                <td>
+                                    <code>/@item.Slug</code>
+                                </td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsHomePage)
+                                    {
+                                        <span class="badge bg-primary">Ana Sayfa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@item.ViewCount</span>
+                                </td>
+                                <td>
+                                    <small>@item.CreatedDate.ToString("dd.MM.yyyy")</small>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info" title="Detaylar">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Düzenle">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Sil" data-confirm-delete>
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        @if (item.IsActive)
+                                        {
+                                            <a href="/@item.Slug" class="btn btn-outline-success" title="Görüntüle" target="_blank">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
