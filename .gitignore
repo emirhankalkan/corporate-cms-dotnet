@@ -1,0 +1,77 @@
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+*.swp
+*.swo
+*~
+
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet Packages
+*.nupkg
+**/packages/*
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# User secrets
+appsettings.Development.json
+appsettings.local.json
+
+# dotnet
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Core
+wwwroot/lib/
+node_modules/
+
+# Uploaded files
+wwwroot/uploads/
+wwwroot/images/uploads/
+
+# GitHub specific files
+.github/copilot-instructions.md
