@@ -4,7 +4,8 @@ using CorporateCMS.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
+// Kurumsal CMS - ASP.NET MVC Uygulaması
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -27,7 +28,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(); // Identity UI için gerekli
+builder.Services.AddRazorPages(); 
 
 // CORS policy if needed
 builder.Services.AddCors(options =>
