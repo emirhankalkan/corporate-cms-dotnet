@@ -36,7 +36,7 @@ CorporateCMS/
     ├── css/admin.css      # Admin panel stilleri
     └── js/admin.js        # Admin panel JavaScript
 ```
-
+  
 ## Kullanıcı Rolleri
 
 | Rol | Açıklama | Yetkiler |
@@ -51,8 +51,8 @@ CorporateCMS/
 ### Gereksinimler
 - .NET 9 SDK
 - Visual Studio Code veya Visual Studio 2022
-- SQLite (dahili)
-
+- SQLite
+ 
 ### Adımlar
 
 1. **Projeyi klonlayın**
