@@ -1,0 +1,123 @@
+@model CorporateCMS.Models.Announcement
+
+@{
+    ViewData["Title"] = "Duyuru Sil";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
+        <a href="@Url.Action("Index")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Geri Dön
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4 border-left-danger">
+                <div class="card-header py-3 bg-danger">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-exclamation-triangle"></i> Duyuru Silme Onayı
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle"></i> Dikkat!
+                        </h5>
+                        <p>Bu duyuruyu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!</p>
+                        <hr>
+                        <p class="mb-0">Silinecek duyuru: <strong>@Model.Title</strong></p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <div class="text-center mb-3">
+                                    <img src="@Model.ImagePath" alt="@Model.Title" class="img-thumbnail" style="max-width: 200px;" />
+                                </div>
+                            }
+
+                            <dl class="row">
+                                <dt class="col-sm-4">Başlık:</dt>
+                                <dd class="col-sm-8">@Model.Title</dd>
+
+                                @if (!string.IsNullOrEmpty(Model.Summary))
+                                {
+                                    <dt class="col-sm-4">Özet:</dt>
+                                    <dd class="col-sm-8">@Model.Summary</dd>
+                                }
+
+                                <dt class="col-sm-4">Durum:</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.IsActive)
+                                    {
+                                        <span class="badge badge-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">Pasif</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4">Sabitlenmiş:</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.IsPinned)
+                                    {
+                                        <span class="badge badge-warning">Evet</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary">Hayır</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-6">Yayın Tarihi:</dt>
+                                <dd class="col-sm-6">@Model.PublishDate?.ToString("dd.MM.yyyy")</dd>
+
+                                <dt class="col-sm-6">Oluşturma:</dt>
+                                <dd class="col-sm-6">@Model.CreatedDate.ToString("dd.MM.yyyy")</dd>
+
+                                <dt class="col-sm-6">Oluşturan:</dt>
+                                <dd class="col-sm-6">@Model.CreatedBy</dd>
+
+                                <dt class="col-sm-6">Görüntülenme:</dt>
+                                <dd class="col-sm-6">
+                                    <span class="badge badge-info">@Model.ViewCount</span>
+                                </dd>
+
+                                @if (!string.IsNullOrEmpty(Model.Tags))
+                                {
+                                    <dt class="col-sm-6">Etiketler:</dt>
+                                    <dd class="col-sm-6">
+                                        @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries).Take(3))
+                                        {
+                                            <span class="badge badge-secondary mr-1">@tag.Trim()</span>
+                                        }
+                                    </dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <form asp-action="Delete" class="d-inline">
+                            <input type="hidden" asp-for="Id" />
+                            <button type="submit" class="btn btn-danger btn-lg mr-3">
+                                <i class="fas fa-trash"></i> Evet, Sil
+                            </button>
+                        </form>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-times"></i> İptal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

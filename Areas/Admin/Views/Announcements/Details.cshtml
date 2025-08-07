@@ -1,0 +1,140 @@
+@model CorporateCMS.Models.Announcement
+
+@{
+    ViewData["Title"] = "Duyuru Detayları";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
+        <div>
+            <a href="@Url.Action("Edit", new { id = Model.Id })" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
+                <i class="fas fa-edit fa-sm text-white-50"></i> Düzenle
+            </a>
+            <a href="@Url.Action("Index")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Geri Dön
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">@Model.Title</h6>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                    {
+                        <div class="text-center mb-4">
+                            <img src="@Model.ImagePath" alt="@Model.Title" class="img-fluid rounded" style="max-height: 400px;" />
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Summary))
+                    {
+                        <div class="alert alert-info">
+                            <h6 class="font-weight-bold">Özet:</h6>
+                            <p class="mb-0">@Model.Summary</p>
+                        </div>
+                    }
+
+                    <div class="content">
+                        @Html.Raw(Model.Content)
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Tags))
+                    {
+                        <div class="mt-4">
+                            <h6 class="font-weight-bold">Etiketler:</h6>
+                            @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <span class="badge badge-secondary mr-1">@tag.Trim()</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Duyuru Bilgileri</h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-6">Durum:</dt>
+                        <dd class="col-sm-6">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge badge-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Pasif</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-6">Sabitlenmiş:</dt>
+                        <dd class="col-sm-6">
+                            @if (Model.IsPinned)
+                            {
+                                <span class="badge badge-warning">Evet</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">Hayır</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-6">Yayın Tarihi:</dt>
+                        <dd class="col-sm-6">@Model.PublishDate?.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-6">Oluşturma:</dt>
+                        <dd class="col-sm-6">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-6">Oluşturan:</dt>
+                        <dd class="col-sm-6">@Model.CreatedBy</dd>
+
+                        @if (Model.UpdatedDate.HasValue)
+                        {
+                            <dt class="col-sm-6">Son Güncelleme:</dt>
+                            <dd class="col-sm-6">@Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm")</dd>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.UpdatedBy))
+                        {
+                            <dt class="col-sm-6">Güncelleyen:</dt>
+                            <dd class="col-sm-6">@Model.UpdatedBy</dd>
+                        }
+
+                        <dt class="col-sm-6">Görüntülenme:</dt>
+                        <dd class="col-sm-6">
+                            <span class="badge badge-info">@Model.ViewCount</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">İşlemler</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Düzenle
+                        </a>
+                        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Sil
+                        </a>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-list"></i> Listeye Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

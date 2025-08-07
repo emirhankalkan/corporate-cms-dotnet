@@ -128,7 +128,7 @@
                                 </tr>
                                 <tr>
                                     <th>Güncellenme:</th>
-                                    <td>@Model.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                    <td>@(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "Hiç güncellenmemiş")</td>
                                 </tr>
                             </table>
                         </div>

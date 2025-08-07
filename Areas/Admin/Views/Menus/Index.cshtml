@@ -60,11 +60,11 @@
                                                 {
                                                     <i class="fas fa-arrow-right text-muted me-2"></i>
                                                 }
-                                                @if (!string.IsNullOrEmpty(item.IconClass))
+                                                @if (!string.IsNullOrEmpty(item.Icon))
                                                 {
-                                                    <i class="@item.IconClass me-2"></i>
+                                                    <i class="@item.Icon me-2"></i>
                                                 }
-                                                @item.Name
+                                                @item.Title
                                             </td>
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.Url))
@@ -79,7 +79,7 @@
                                             <td>
                                                 @if (item.Parent != null)
                                                 {
-                                                    @item.Parent.Name
+                                                    @item.Parent.Title
                                                 }
                                                 else
                                                 {
@@ -95,9 +95,9 @@
                                                 {
                                                     <span class="badge bg-secondary">Pasif</span>
                                                 }
-                                                @if (item.OpenInNewTab)
+                                                @if (item.IsExternal)
                                                 {
-                                                    <span class="badge bg-info ms-1">Yeni Sekme</span>
+                                                    <span class="badge bg-info ms-1">Harici Link</span>
                                                 }
                                             </td>
                                             <td>

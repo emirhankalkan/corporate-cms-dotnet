@@ -2,8 +2,6 @@
 
 Modern ASP.NET MVC (.NET 9) tabanlı kurumsal içerik yönetim sistemi.
 
-**Live Demo:** https://github.com/emirhankalkan/corporate-cms-dotnet
-
 ## Özellikler
 
 ### Temel Özellikler
