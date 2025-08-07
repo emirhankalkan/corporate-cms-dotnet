@@ -87,20 +87,20 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <a href="/Admin/Pages/Create" class="btn btn-primary">
+                    <a asp-area="Admin" asp-controller="Pages" asp-action="Create" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Yeni Sayfa Ekle
                     </a>
-                    <a href="/Admin/Menus/Create" class="btn btn-success">
+                    <a asp-area="Admin" asp-controller="Menus" asp-action="Create" class="btn btn-success">
                         <i class="fas fa-plus"></i> Yeni Menü Ekle
                     </a>
-                    <a href="/Admin/Sliders/Create" class="btn btn-info">
+                    <a asp-area="Admin" asp-controller="Sliders" asp-action="Create" class="btn btn-info">
                         <i class="fas fa-plus"></i> Yeni Slider Ekle
                     </a>
-                    <a href="/Admin/Announcements/Create" class="btn btn-warning">
+                    <a asp-area="Admin" asp-controller="Announcements" asp-action="Create" class="btn btn-warning">
                         <i class="fas fa-plus"></i> Yeni Duyuru Ekle
                     </a>
                     <hr>
-                    <a href="/Admin/Admin/CreateSampleData" class="btn btn-outline-primary" 
+                    <a asp-area="Admin" asp-controller="Admin" asp-action="CreateSampleData" class="btn btn-outline-primary" 
                        onclick="return confirm('Örnek veriler oluşturulsun mu?')">
                         <i class="fas fa-database"></i> Örnek Veri Oluştur
                     </a>

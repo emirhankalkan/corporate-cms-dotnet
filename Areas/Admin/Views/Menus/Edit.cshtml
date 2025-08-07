@@ -46,9 +46,15 @@
                                     <label asp-for="ParentId" class="form-label">Üst Menü</label>
                                     <select asp-for="ParentId" class="form-control">
                                         <option value="">Ana Menü</option>
-                                        @foreach (var parent in ViewBag.ParentMenus as List<CorporateCMS.Models.Menu>)
-                                        {
-                                            <option value="@parent.Id">@parent.Title</option>
+                                        @{
+                                            var parentMenus = ViewBag.ParentMenus as List<CorporateCMS.Models.Menu>;
+                                            if (parentMenus != null)
+                                            {
+                                                foreach (var parent in parentMenus)
+                                                {
+                                                    <option value="@parent.Id">@parent.Title</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>

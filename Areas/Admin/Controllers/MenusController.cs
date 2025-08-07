@@ -11,10 +11,12 @@ namespace CorporateCMS.Areas.Admin.Controllers
     public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<MenusController> _logger;
 
-        public MenusController(ApplicationDbContext context)
+        public MenusController(ApplicationDbContext context, ILogger<MenusController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Admin/Menus

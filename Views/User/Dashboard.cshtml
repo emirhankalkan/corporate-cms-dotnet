@@ -1,0 +1,108 @@
+@model CorporateCMS.ViewModels.UserDashboardViewModel
+@{
+    ViewData["Title"] = "Kullanıcı Paneli";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3 user-panel">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Kullanıcı Menüsü
+                    </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Kontrol Paneli
+                    </a>
+                    <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Profil Ayarları
+                    </a>
+                    <a href="javascript:document.getElementById('logoutForm').submit();" class="list-group-item list-group-item-action text-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Çıkış Yap
+                    </a>
+                    <form id="logoutForm" class="d-none" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit">Çıkış Yap</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-9 user-panel">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                        Kontrol Paneli
+                    </h5>
+                    <span class="badge bg-success">Aktif</span>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-4">Hoş Geldiniz, @Model.UserName</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted mb-3">
+                                        <i class="fas fa-user me-2"></i>
+                                        Hesap Bilgileri
+                                    </h6>
+                                    <p class="mb-2"><strong>E-posta:</strong> @Model.Email</p>
+                                    <p class="mb-2">
+                                        <strong>Roller:</strong>
+                                        @foreach(var role in Model.Roles)
+                                        {
+                                            <span class="badge bg-primary me-1">@role</span>
+                                        }
+                                    </p>
+                                    <p class="mb-2"><strong>Son Giriş:</strong> @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm mb-4">
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted mb-3">
+                                        <i class="fas fa-lock me-2"></i>
+                                        Güvenlik
+                                    </h6>
+                                    <p class="mb-2"><strong>Şifre Durumu:</strong> <span class="text-success">Güncel</span></p>
+                                    <p class="mb-0">
+                                        <a asp-controller="User" asp-action="Profile" class="btn btn-sm btn-primary mt-3">
+                                            <i class="fas fa-key me-1"></i>
+                                            Şifre Değiştir
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted mb-3">
+                                        <i class="fas fa-bell me-2"></i>
+                                        Duyurular ve Bildirimler
+                                    </h6>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <strong>Bilgi:</strong> Kullanıcı paneliniz güncellenmiştir. Yeni özellikler eklenmiştir.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

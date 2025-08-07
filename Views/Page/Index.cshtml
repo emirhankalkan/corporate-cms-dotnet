@@ -1,0 +1,304 @@
+@model IEnumerable<CorporateCMS.Models.Page>
+
+@{
+    ViewData["Title"] = "Sayfalar";
+    ViewData["MetaDescription"] = "Kurumsal web sitemizdeki tüm sayfalar";
+    var currentPage = ViewBag.CurrentPage as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+    var searchTerm = ViewBag.SearchTerm as string;
+    var totalCount = ViewBag.TotalCount as int? ?? 0;
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/">Ana Sayfa</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Sayfalar</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2">
+                    <i class="fas fa-file-alt text-primary me-2"></i>
+                    Sayfalar
+                </h1>
+                <small class="text-muted">@totalCount sayfa bulundu</small>
+            </div>
+
+            <!-- Arama ve Sıralama -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="d-flex flex-wrap">
+                        <div class="d-flex flex-grow-1 mb-2 mb-md-0">
+                            <input type="text" class="form-control me-2" name="search" 
+                                   value="@searchTerm" placeholder="Sayfa ara...">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            @if (!string.IsNullOrEmpty(searchTerm))
+                            {
+                                <a href="@Url.Action("Index")" class="btn btn-outline-secondary ms-2">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            }
+                        </div>
+                        <div class="ms-md-2 d-flex">
+                            <select name="sortBy" class="form-select" onchange="this.form.submit()">
+                                @{
+                                    var sortBy = ViewBag.SortBy as string;
+                                    var isNewest = sortBy == null || sortBy == "newest";
+                                    var isOldest = sortBy == "oldest";
+                                    var isTitle = sortBy == "title";
+                                    var isViews = sortBy == "views";
+                                }
+                                <option value="newest" selected="@isNewest">Yeniden Eskiye</option>
+                                <option value="oldest" selected="@isOldest">Eskiden Yeniye</option>
+                                <option value="title" selected="@isTitle">Başlık (A-Z)</option>
+                                <option value="views" selected="@isViews">En Çok Görüntülenen</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(searchTerm))
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-search me-2"></i>
+                    "<strong>@searchTerm</strong>" araması için @totalCount sonuç bulundu.
+                </div>
+            }
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var page in Model)
+                    {
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="/@(page.Slug)" class="text-decoration-none">
+                                            @(page.Title)
+                                        </a>
+                                    </h5>
+                                    
+                                    @if (!string.IsNullOrEmpty(page.MetaDescription))
+                                    {
+                                        <p class="card-text text-muted">
+                                            @(page.MetaDescription.Length > 120 ? page.MetaDescription.Substring(0, 120) + "..." : page.MetaDescription)
+                                        </p>
+                                    }
+
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div class="btn-group">
+                                            <a href="/@(page.Slug)" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-arrow-right me-1"></i>Devamını Oku
+                                            </a>
+                                        </div>
+                                        <div class="text-muted">
+                                            <small>
+                                                <i class="fas fa-calendar me-1"></i>
+                                                @(page.CreatedDate.ToString("dd.MM.yyyy"))
+                                            </small>
+                                            @if (page.ViewCount > 0)
+                                            {
+                                                <br>
+                                                <small>
+                                                    <i class="fas fa-eye me-1"></i>
+                                                    @(page.ViewCount) görüntülenme
+                                                </small>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Pagination -->
+                @if (totalPages > 1)
+                {
+                    <nav aria-label="Sayfa navigasyonu" class="my-4">
+                        <ul class="pagination justify-content-center">
+                            @{
+                                // Mevcut URL parametrelerini koru
+                                var urlParams = new Dictionary<string, string>();
+                                if (!string.IsNullOrEmpty(searchTerm)) urlParams["search"] = searchTerm;
+                                if (!string.IsNullOrEmpty(ViewBag.SortBy as string)) urlParams["sortBy"] = ViewBag.SortBy;
+                                
+                                string GetPageUrl(int pageNumber) 
+                                {
+                                    var parameters = new List<string> { $"page={pageNumber}" };
+                                    foreach (var param in urlParams)
+                                    {
+                                        parameters.Add($"{param.Key}={Uri.EscapeDataString(param.Value)}");
+                                    }
+                                    return "?" + string.Join("&", parameters);
+                                }
+                            }
+
+                            <!-- İlk Sayfa -->
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="@GetPageUrl(1)" title="İlk Sayfa">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            </li>
+
+                            <!-- Önceki Sayfa -->
+                            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="@GetPageUrl(currentPage - 1)">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            </li>
+
+                            <!-- Sayfa Numaraları -->
+                            @{
+                                var startPage = Math.Max(1, currentPage - 2);
+                                var endPage = Math.Min(totalPages, currentPage + 2);
+                                
+                                // Başlangıç noktasında "..." göster
+                                if (startPage > 1) 
+                                {
+                                    <li class="page-item @(currentPage == 1 ? "active" : "")">
+                                        <a class="page-link" href="@GetPageUrl(1)">1</a>
+                                    </li>
+                                    if (startPage > 2) 
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                }
+                                
+                                // Sayfa numaralarını göster
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link" href="@GetPageUrl(i)">@i</a>
+                                    </li>
+                                }
+                                
+                                // Son kısımda "..." göster
+                                if (endPage < totalPages) 
+                                {
+                                    if (endPage < totalPages - 1) 
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                    <li class="page-item @(currentPage == totalPages ? "active" : "")">
+                                        <a class="page-link" href="@GetPageUrl(totalPages)">@totalPages</a>
+                                    </li>
+                                }
+                            }
+
+                            <!-- Sonraki Sayfa -->
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" href="@GetPageUrl(currentPage + 1)">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </li>
+
+                            <!-- Son Sayfa -->
+                            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                <a class="page-link" href="@GetPageUrl(totalPages)" title="Son Sayfa">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="d-flex justify-content-center">
+                        <div class="btn-group btn-group-sm">
+                            <a class="btn btn-outline-primary" href="@GetPageUrl(10)">10</a>
+                            <a class="btn btn-outline-primary" href="@GetPageUrl(20)">20</a>
+                            <a class="btn btn-outline-primary" href="@GetPageUrl(50)">50</a>
+                        </div>
+                        <span class="ms-2 text-muted align-self-center small">sayfa başına</span>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">
+                            @if (!string.IsNullOrEmpty(searchTerm))
+                            {
+                                <span>Arama sonucu bulunamadı</span>
+                            }
+                            else
+                            {
+                                <span>Henüz sayfa yok</span>
+                            }
+                        </h5>
+                        @if (!string.IsNullOrEmpty(searchTerm))
+                        {
+                            <p class="text-muted">Farklı anahtar kelimeler deneyebilirsiniz.</p>
+                            <a href="@Url.Action("Index")" class="btn btn-primary">Tüm Sayfaları Görüntüle</a>
+                        }
+                        else
+                        {
+                            <p class="text-muted">İlk sayfamız yakında yayında!</p>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle text-info me-2"></i>
+                        Sayfa Bilgileri
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <strong>Toplam Sayfa:</strong> @totalCount
+                        </li>
+                        <li class="mb-2">
+                            <strong>Sayfa:</strong> @currentPage / @totalPages
+                        </li>
+                        @if (!string.IsNullOrEmpty(searchTerm))
+                        {
+                            <li class="mb-2">
+                                <strong>Arama:</strong> @searchTerm
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bullhorn text-warning me-2"></i>
+                        Duyurular
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Son duyurularımızı takip edin.</p>
+                    <a href="@Url.Action("Index", "Announcement")" class="btn btn-warning btn-sm">
+                        <i class="fas fa-bullhorn me-1"></i>Duyuruları Görüntüle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

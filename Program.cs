@@ -50,10 +50,12 @@ await InitializeDatabase(app);
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error/500");
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
     app.UseHsts();
 }
 
@@ -65,17 +67,30 @@ app.UseRouting();
 app.UseAuthentication(); // Authentication middleware
 app.UseAuthorization();  // Authorization middleware
 
-// Configure routing
+// Admin area route
 app.MapControllerRoute(
-    name: "admin",
-    pattern: "Admin/{controller=Admin}/{action=Index}/{id?}",
-    defaults: new { area = "Admin" });
+    name: "areas",
+    pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
 
+// Özel error sayfaları
+app.MapControllerRoute(
+    name: "404",
+    pattern: "404",
+    defaults: new { controller = "Error", action = "PageNotFound" });
+
+app.MapControllerRoute(
+    name: "500",
+    pattern: "500",
+    defaults: new { controller = "Error", action = "ServerError" });
+
+// SEO-friendly URL için özel slug rotası (daha yüksek öncelik)
 app.MapControllerRoute(
     name: "page",
     pattern: "{slug}",
-    defaults: new { controller = "Page", action = "Details" });
+    defaults: new { controller = "Page", action = "Details" },
+    constraints: new { slug = @"^(?!Admin|Account|Error|Home|api|Identity).*$" }); // Admin, Account gibi routeleri hariç tut
 
+// Standart controller rota sistemi
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Sunucu Hatası";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="text-center">
+                <h1 class="display-1">500</h1>
+                <h2>Sunucu Hatası</h2>
+                <p class="lead mb-4">Üzgünüz, işleminiz sırasında bir hata oluştu.</p>
+                <div class="d-flex justify-content-center">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-primary me-3">
+                        <i class="fas fa-home me-1"></i> Ana Sayfa
+                    </a>
+                    <a href="javascript:history.back()" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

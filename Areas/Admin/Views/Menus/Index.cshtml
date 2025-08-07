@@ -135,3 +135,43 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        console.log('Menu Index sayfası yüklendi');
+        
+        // Sayfa yüklendiğinde butonları kontrol et
+        $(document).ready(function() {
+            console.log('jQuery ready');
+            
+            // Tüm butonları listele ve düzelt
+            $('.btn').each(function(index, button) {
+                var href = $(button).attr('href');
+                console.log('Buton ' + index + ':', href, $(button).text().trim());
+                
+                // Eğer bağlantı doğru formatta değilse düzelt
+                if (href && !href.startsWith("/") && !href.startsWith("http")) {
+                    // Area değerini ekleyelim
+                    if (!href.includes('/Admin/')) {
+                        var newHref = '/Admin/' + href;
+                        console.log('Bağlantı düzeltildi:', href, ' => ', newHref);
+                        $(button).attr('href', newHref);
+                    }
+                }
+            });
+            
+            // Buton click eventlerini dinle
+            $('.btn').on('click', function(e) {
+                console.log('Buton tıklandı:', $(this).attr('href'));
+                
+                // Eğer href boşsa engelleyelim
+                if (!$(this).attr('href') || $(this).attr('href') === '#') {
+                    e.preventDefault();
+                    console.log('Geçersiz href, tıklama engellendi');
+                    alert('Bu bağlantı henüz aktif değil.');
+                    return false;
+                }
+            });
+        });
+    </script>
+}
