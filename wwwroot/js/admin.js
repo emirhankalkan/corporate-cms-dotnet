@@ -6,22 +6,49 @@
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     const sidebar = document.querySelector('.sidebar');
 
+    // Tooltip for collapsed sidebar items
+    function enhanceCollapsedTooltips() {
+        const isCollapsed = sidebar && sidebar.classList.contains('collapsed');
+        const links = document.querySelectorAll('.sidebar .nav-link');
+        links.forEach(l => {
+            if (isCollapsed) {
+                const span = l.querySelector('span');
+                if (span) l.setAttribute('title', span.textContent.trim());
+            } else {
+                l.removeAttribute('title');
+            }
+        });
+    }
+
     if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', function(e) {
             e.preventDefault();
             sidebar.classList.toggle('collapsed');
             document.querySelector('.main-content').classList.toggle('expanded');
+            enhanceCollapsedTooltips();
         });
     }
 
+    // Initial call
+    enhanceCollapsedTooltips();
+
     // Handle responsive behavior
     function handleResponsiveLayout() {
+        const mainContent = document.querySelector('.main-content');
         if (window.innerWidth <= 768) {
-            sidebar ? .classList.add('collapsed');
-            document.querySelector('.main-content') ? .classList.add('expanded');
+            if (sidebar && !sidebar.classList.contains('collapsed')) {
+                sidebar.classList.add('collapsed');
+            }
+            if (mainContent && !mainContent.classList.contains('expanded')) {
+                mainContent.classList.add('expanded');
+            }
         } else {
-            sidebar ? .classList.remove('collapsed');
-            document.querySelector('.main-content') ? .classList.remove('expanded');
+            if (sidebar && sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+            }
+            if (mainContent && mainContent.classList.contains('expanded')) {
+                mainContent.classList.remove('expanded');
+            }
         }
     }
 

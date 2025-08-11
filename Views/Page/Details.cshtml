@@ -6,65 +6,32 @@
     ViewData["MetaKeywords"] = Model.MetaKeywords;
 }
 
-<div class="container my-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+        <div class="col-lg-9">
+            <nav aria-label="breadcrumb" class="small mb-3">
+                <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
                 </ol>
             </nav>
-
-            <!-- Sayfa İçeriği -->
-            <article class="bg-white rounded shadow-sm p-4 mb-4">
-                <header class="mb-4">
-                    <h1 class="display-5 fw-bold text-primary mb-3">@Model.Title</h1>
-                    
-                    <div class="d-flex align-items-center text-muted mb-3">
-                        <small>
-                            <i class="fas fa-calendar me-1"></i>
-                            @Model.CreatedDate.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR"))
-                        </small>
-                        <span class="mx-2">•</span>
-                        <small>
-                            <i class="fas fa-eye me-1"></i>
-                            @Model.ViewCount görüntülenme
-                        </small>
-                        @if (Model.UpdatedDate.HasValue)
-                        {
-                            <span class="mx-2">•</span>
-                            <small>
-                                <i class="fas fa-edit me-1"></i>
-                                Son güncelleme: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy")
-                            </small>
-                        }
+            <article class="card-app mb-4">
+                <header class="mb-3">
+                    <h1 class="h2 fw-bold mb-2">@Model.Title</h1>
+                    <div class="d-flex flex-wrap align-items-center gap-3 small u-muted mb-3">
+                        <span><i class="fas fa-calendar me-1"></i>@Model.CreatedDate.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("tr-TR"))</span>
+                        <span><i class="fas fa-eye me-1"></i>@Model.ViewCount görüntülenme</span>
+                        @if (Model.UpdatedDate.HasValue) { <span><i class="fas fa-edit me-1"></i>Son: @Model.UpdatedDate.Value.ToString("dd.MM.yyyy")</span> }
                     </div>
-
-                    @if (!string.IsNullOrEmpty(Model.MetaDescription))
-                    {
-                        <div class="alert alert-light border-start border-primary border-4">
-                            <p class="mb-0 fw-medium">@Model.MetaDescription</p>
-                        </div>
-                    }
+                    @if (!string.IsNullOrEmpty(Model.MetaDescription)) { <div class="p-3 rounded border" style="background:var(--color-primary-soft); border-color:var(--color-border);"><p class="m-0 small fw-semibold">@Model.MetaDescription</p></div> }
                 </header>
-
-                <div class="content">
+                <div class="prose-app content-body">
                     @Html.Raw(Model.Content)
                 </div>
             </article>
-
-            <!-- İlgili Sayfalar -->
-            <div class="row">
-                <div class="col-12">
-                    <h5 class="mb-3">
-                        <i class="fas fa-arrow-left text-primary me-2"></i>
-                        <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
-                            Ana Sayfaya Dön
-                        </a>
-                    </h5>
-                </div>
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+                <a asp-controller="Home" asp-action="Index" class="btn-app btn-app-outline"><i class="fas fa-arrow-left"></i> Ana Sayfa</a>
+                <a asp-controller="Page" asp-action="Index" class="btn-app btn-app-soft"><i class="fas fa-list"></i> Tüm Sayfalar</a>
             </div>
         </div>
     </div>
@@ -72,46 +39,15 @@
 
 @section Styles {
     <style>
-        .content {
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
-        
-        .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
-            color: #0d6efd;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .content p {
-            margin-bottom: 1.5rem;
-            text-align: justify;
-        }
-        
-        .content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            margin: 1rem 0;
-        }
-        
-        .content blockquote {
-            border-left: 4px solid #0d6efd;
-            padding-left: 1rem;
-            margin: 1.5rem 0;
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 0.5rem;
-        }
-        
-        .content ul, .content ol {
-            padding-left: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .content li {
-            margin-bottom: 0.5rem;
-        }
+        .content-body { line-height:1.7; font-size:1rem; color:var(--color-text); }
+        .content-body h1,.content-body h2,.content-body h3,.content-body h4,.content-body h5 { margin-top:2.2rem; margin-bottom:1rem; font-weight:600; letter-spacing:-.5px; }
+        .content-body h2 { font-size:1.65rem; }
+        .content-body h3 { font-size:1.35rem; }
+        .content-body p { margin-bottom:1.3rem; }
+        .content-body img { max-width:100%; height:auto; border-radius:var(--color-radius-lg); box-shadow:var(--shadow-md); margin:1.25rem 0; }
+        .content-body blockquote { border-left:4px solid var(--color-primary); padding:1rem 1.25rem; background:var(--color-surface-alt); border-radius:var(--color-radius-md); margin:1.75rem 0; font-style:italic; }
+        .content-body ul, .content-body ol { padding-left:1.4rem; margin-bottom:1.3rem; }
+        .content-body li { margin-bottom:.45rem; }
+        @media (max-width:576px){ .content-body h2 { font-size:1.4rem; } }
     </style>
 }

@@ -11,8 +11,7 @@
     <meta name="description" content="@ViewData["MetaDescription"]" />
     <meta name="keywords" content="@ViewData["MetaKeywords"]" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/simple-style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/navbar-modern.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,43 +20,37 @@
 </head>
 <body>
     <header>
-        <nav class="navbar-modern navbar navbar-expand-lg">
+        <nav class="navbar-app navbar navbar-expand-lg px-0">
             <div class="container">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <a class="navbar-brand-modern text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
-                        <span class="brand-icon">
-                            <i class="fas fa-building"></i>
-                        </span>
-                        Kurumsal CMS
-                    </a>
-                    <button class="navbar-toggler-modern d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarModern" aria-controls="navbarModern" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                
-                <div class="collapse navbar-collapse navbar-collapse-modern mt-2 mt-lg-0" id="navbarModern">
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <a class="brand-app text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="brand-icon-app"><i class="fas fa-building"></i></span>
+                    Kurumsal CMS
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Menü">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse nav-collapse-app" id="navMain">
+                    <ul class="navbar-nav mx-auto nav-links-app mb-3 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link-modern @(Context.Request.Path == "/" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-home nav-icon"></i>
+                            <a class="nav-link-app @(Context.Request.Path == "/" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i>
                                 <span>Ana Sayfa</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-modern @(Context.Request.Path.StartsWithSegments("/Page") ? "active" : "")" asp-area="" asp-controller="Page" asp-action="Index">
-                                <i class="fas fa-file-alt nav-icon"></i>
+                            <a class="nav-link-app @(Context.Request.Path.StartsWithSegments("/Page") ? "active" : "")" asp-area="" asp-controller="Page" asp-action="Index">
+                                <i class="fas fa-file-alt"></i>
                                 <span>Sayfalar</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-modern @(Context.Request.Path.StartsWithSegments("/Announcement") ? "active" : "")" asp-area="" asp-controller="Announcement" asp-action="Index">
-                                <i class="fas fa-bullhorn nav-icon"></i>
+                            <a class="nav-link-app @(Context.Request.Path.StartsWithSegments("/Announcement") ? "active" : "")" asp-area="" asp-controller="Announcement" asp-action="Index">
+                                <i class="fas fa-bullhorn"></i>
                                 <span>Duyurular</span>
                             </a>
                         </li>
                     </ul>
-                    
-                    <div class="ms-auto">
+                    <div class="ms-auto nav-auth-group">
                         <partial name="_LoginPartial" />
                     </div>
                 </div>
@@ -69,38 +62,40 @@
         @RenderBody()
     </main>
 
-    <footer class="footer-simple mt-4">
+    <footer class="mt-5 pt-4 pb-4" style="background:var(--color-surface); border-top:1px solid var(--color-border);">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <h5 class="mb-2">Kurumsal CMS</h5>
-                    <p class="text-muted small">
-                        ASP.NET Core içerik yönetim sistemi.
-                    </p>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5 class="fw-semibold mb-2">Kurumsal CMS</h5>
+                    <p class="u-muted small mb-0">ASP.NET Core içerik yönetim sistemi.</p>
                 </div>
-                <div class="col-md-6 mb-3 text-md-end">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="/" class="text-decoration-none text-muted">Ana Sayfa</a></li>
-                        <li class="list-inline-item"><a asp-area="" asp-controller="Page" asp-action="Index" class="text-decoration-none text-muted">Sayfalar</a></li>
-                        <li class="list-inline-item"><a asp-area="" asp-controller="Announcement" asp-action="Index" class="text-decoration-none text-muted">Duyurular</a></li>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline small mb-0">
+                        <li class="list-inline-item"><a href="/" class="text-decoration-none u-muted">Ana Sayfa</a></li>
+                        <li class="list-inline-item"><a asp-area="" asp-controller="Page" asp-action="Index" class="text-decoration-none u-muted">Sayfalar</a></li>
+                        <li class="list-inline-item"><a asp-area="" asp-controller="Announcement" asp-action="Index" class="text-decoration-none u-muted">Duyurular</a></li>
                         @if (SignInManager.IsSignedIn(User) && (User.IsInRole("SuperAdmin") || User.IsInRole("Admin")))
                         {
-                            <li class="list-inline-item"><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="text-decoration-none text-muted">Yönetim</a></li>
+                            <li class="list-inline-item"><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="text-decoration-none u-muted">Yönetim</a></li>
                         }
                     </ul>
                 </div>
             </div>
-            <hr class="my-3">
-            <div class="text-center">
-                <p class="text-muted mb-0 small">
-                    &copy; @DateTime.Now.Year - Kurumsal CMS
-                </p>
-            </div>
+            <div class="u-divider"></div>
+            <div class="text-center small u-muted">&copy; @DateTime.Now.Year - Kurumsal CMS</div>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        document.addEventListener('scroll', function(){
+            const nav = document.querySelector('.navbar-app');
+            if(!nav) return; 
+            if(window.scrollY > 10) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+        });
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/validation.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

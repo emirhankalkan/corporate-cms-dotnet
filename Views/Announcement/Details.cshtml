@@ -6,195 +6,85 @@
     ViewData["MetaKeywords"] = Model.Tags;
 }
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="/">Ana Sayfa</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="@Url.Action("Index", "Announcement")">Duyurular</a>
-                    </li>
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="small mb-3">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Announcement")">Duyurular</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
                 </ol>
             </nav>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-8">
-            <article class="card shadow-sm">
-                @if (!string.IsNullOrEmpty(Model.ImagePath))
-                {
-                    <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Title" style="max-height: 400px; object-fit: cover;">
+            <article class="card-app mb-4 overflow-hidden">
+                @if (!string.IsNullOrEmpty(Model.ImagePath)) {
+                    <div class="ratio ratio-21x9 mb-3" style="--bs-aspect-ratio:42%; background:var(--color-surface-alt);">
+                        <img src="@Model.ImagePath" alt="@Model.Title" style="object-fit:cover; width:100%; height:100%; border-radius:var(--color-radius-md);" />
+                    </div>
                 }
-                
-                <div class="card-body">
-                    <header class="mb-4">
-                        <h1 class="card-title h2">
-                            @if (Model.IsPinned)
-                            {
-                                <i class="fas fa-thumbtack text-warning me-2"></i>
-                            }
-                            @Model.Title
-                        </h1>
-                        
-                        <div class="d-flex flex-wrap align-items-center text-muted mb-3">
-                            <small class="me-3">
-                                <i class="fas fa-calendar me-1"></i>
-                                @Model.CreatedDate.ToString("dd MMMM yyyy, HH:mm", new System.Globalization.CultureInfo("tr-TR"))
-                            </small>
-                            @if (Model.PublishDate.HasValue)
-                            {
-                                <small class="me-3">
-                                    <i class="fas fa-broadcast-tower me-1"></i>
-                                    Yayın: @Model.PublishDate?.ToString("dd.MM.yyyy", new System.Globalization.CultureInfo("tr-TR"))
-                                </small>
-                            }
-                            <small class="me-3">
-                                <i class="fas fa-eye me-1"></i>
-                                @Model.ViewCount görüntülenme
-                            </small>
-                            @if (!string.IsNullOrEmpty(Model.CreatedBy))
-                            {
-                                <small>
-                                    <i class="fas fa-user me-1"></i>
-                                    @Model.CreatedBy
-                                </small>
+                <header class="mb-3">
+                    <h1 class="h2 fw-bold mb-2">@if (Model.IsPinned) { <i class="fas fa-thumbtack text-warning me-1"></i> } @Model.Title</h1>
+                    <div class="d-flex flex-wrap gap-3 small u-muted mb-2">
+                        <span><i class="fas fa-calendar me-1"></i>@Model.CreatedDate.ToString("dd MMMM yyyy, HH:mm", new System.Globalization.CultureInfo("tr-TR"))</span>
+                        @if (Model.PublishDate.HasValue) { <span><i class="fas fa-broadcast-tower me-1"></i>@Model.PublishDate?.ToString("dd.MM.yyyy")</span> }
+                        <span><i class="fas fa-eye me-1"></i>@Model.ViewCount görüntülenme</span>
+                        @if (!string.IsNullOrEmpty(Model.CreatedBy)) { <span><i class="fas fa-user me-1"></i>@Model.CreatedBy</span> }
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Summary)) {
+                        <div class="p-3 rounded border" style="background:var(--color-primary-soft); border-color:var(--color-border);">
+                            <p class="m-0 small fw-semibold">@Model.Summary</p>
+                        </div>
+                    }
+                </header>
+                <div class="content-body">
+                    @Html.Raw(Model.Content)
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Tags)) {
+                    <footer class="mt-4 pt-3 border-top">
+                        <div class="small fw-semibold mb-2 u-muted">Etiketler</div>
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries)) {
+                                <span class="badge-app badge-outline">@tag.Trim()</span>
                             }
                         </div>
-
-                        @if (!string.IsNullOrEmpty(Model.Summary))
-                        {
-                            <div class="alert alert-info">
-                                <h6 class="alert-heading">Özet</h6>
-                                <p class="mb-0">@Model.Summary</p>
-                            </div>
-                        }
-                    </header>
-
-                    <div class="content">
-                        @Html.Raw(Model.Content)
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Tags))
-                    {
-                        <footer class="mt-4 pt-3 border-top">
-                            <h6 class="text-muted mb-2">Etiketler:</h6>
-                            @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries))
-                            {
-                                <span class="badge bg-secondary me-1 mb-1">@tag.Trim()</span>
-                            }
-                        </footer>
-                    }
-                </div>
+                    </footer>
+                }
             </article>
-
-            <!-- Navigation -->
-            <div class="d-flex justify-content-between mt-4">
-                <a href="@Url.Action("Index", "Announcement")" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-1"></i>Tüm Duyurular
-                </a>
-                <div>
-                    <button class="btn btn-outline-secondary" onclick="window.print()">
-                        <i class="fas fa-print me-1"></i>Yazdır
-                    </button>
-                    <button class="btn btn-outline-info" onclick="shareAnnouncement()">
-                        <i class="fas fa-share me-1"></i>Paylaş
-                    </button>
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+                <a href="@Url.Action("Index", "Announcement")" class="btn-app btn-app-outline"><i class="fas fa-arrow-left"></i> Tüm Duyurular</a>
+                <div class="d-flex gap-2">
+                    <button class="btn-app btn-app-soft" onclick="window.print()"><i class="fas fa-print"></i> Yazdır</button>
+                    <button class="btn-app btn-app-soft" onclick="shareAnnouncement()"><i class="fas fa-share"></i> Paylaş</button>
                 </div>
             </div>
         </div>
-
-        <!-- Sidebar -->
         <div class="col-lg-4">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="fas fa-info-circle text-info me-2"></i>
-                        Duyuru Bilgileri
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <dl class="row mb-0">
-                        <dt class="col-sm-5">Durum:</dt>
-                        <dd class="col-sm-7">
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">Aktif</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Pasif</span>
-                            }
-                        </dd>
-
-                        <dt class="col-sm-5">Sabitlenmiş:</dt>
-                        <dd class="col-sm-7">
-                            @if (Model.IsPinned)
-                            {
-                                <span class="badge bg-warning">Evet</span>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Hayır</span>
-                            }
-                        </dd>
-
-                        @if (Model.PublishDate.HasValue)
-                        {
-                            <dt class="col-sm-5">Yayın Tarihi:</dt>
-                            <dd class="col-sm-7">@Model.PublishDate?.ToString("dd.MM.yyyy")</dd>
-                        }
-
-                        <dt class="col-sm-5">Oluşturma:</dt>
-                        <dd class="col-sm-7">@Model.CreatedDate.ToString("dd.MM.yyyy")</dd>
-
-                        @if (Model.UpdatedDate.HasValue)
-                        {
-                            <dt class="col-sm-5">Güncelleme:</dt>
-                            <dd class="col-sm-7">@Model.UpdatedDate?.ToString("dd.MM.yyyy")</dd>
-                        }
-                    </dl>
-                </div>
+            <div class="card-app mb-4">
+                <div class="fw-semibold mb-2 d-flex align-items-center gap-2"><i class="fas fa-info-circle text-info"></i> Duyuru Bilgileri</div>
+                <dl class="row small mb-0 u-muted">
+                    <dt class="col-sm-5">Durum:</dt>
+                    <dd class="col-sm-7">@(Model.IsActive ? "Aktif" : "Pasif")</dd>
+                    <dt class="col-sm-5">Sabit:</dt>
+                    <dd class="col-sm-7">@(Model.IsPinned ? "Evet" : "Hayır")</dd>
+                    @if (Model.PublishDate.HasValue) { <dt class="col-sm-5">Yayın:</dt><dd class="col-sm-7">@Model.PublishDate?.ToString("dd.MM.yyyy")</dd> }
+                    <dt class="col-sm-5">Oluşturma:</dt>
+                    <dd class="col-sm-7">@Model.CreatedDate.ToString("dd.MM.yyyy")</dd>
+                    @if (Model.UpdatedDate.HasValue) { <dt class="col-sm-5">Güncelleme:</dt><dd class="col-sm-7">@Model.UpdatedDate?.ToString("dd.MM.yyyy")</dd> }
+                </dl>
             </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="mb-0">
-                        <i class="fas fa-bullhorn text-warning me-2"></i>
-                        Diğer Duyurular
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Daha fazla duyuru için duyurular sayfasını ziyaret edin.</p>
-                    <a href="@Url.Action("Index", "Announcement")" class="btn btn-primary btn-sm">
-                        <i class="fas fa-list me-1"></i>Tüm Duyurular
-                    </a>
-                </div>
+            <div class="card-app">
+                <div class="fw-semibold mb-2 d-flex align-items-center gap-2"><i class="fas fa-bullhorn text-warning"></i> Diğer</div>
+                <p class="u-muted small mb-3">Daha fazla duyuru için liste sayfasına geri dönün.</p>
+                <a href="@Url.Action("Index", "Announcement")" class="btn-app btn-app-soft btn-sm"><i class="fas fa-list"></i> Liste</a>
             </div>
         </div>
     </div>
 </div>
 
+@section Styles {<style>.content-body { line-height:1.65; font-size:1rem; } .content-body h2 { font-size:1.55rem; margin-top:2rem; margin-bottom:1rem; } .content-body img { max-width:100%; border-radius:var(--color-radius-lg); box-shadow:var(--shadow-md); margin:1.25rem 0; } .content-body blockquote { border-left:4px solid var(--color-primary); padding:1rem 1.25rem; background:var(--color-surface-alt); border-radius:var(--color-radius-md); margin:1.75rem 0; font-style:italic;} @media (max-width:576px){ .content-body h2 { font-size:1.3rem; } }</style>}
+
 @section Scripts {
     <script>
-        function shareAnnouncement() {
-            if (navigator.share) {
-                navigator.share({
-                    title: '@Model.Title',
-                    text: '@(Model.Summary ?? Model.Title)',
-                    url: window.location.href
-                });
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(function() {
-                    alert('Link kopyalandı!');
-                });
-            }
-        }
+        function shareAnnouncement(){ if(navigator.share){ navigator.share({ title:'@Model.Title', text:'@(Model.Summary ?? Model.Title)', url:window.location.href }); } else { const url=window.location.href; navigator.clipboard.writeText(url).then(()=>alert('Link kopyalandı!')); } }
     </script>
 }

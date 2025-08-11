@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Kurumsal CMS Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
                         <span class="ms-2">Kurumsal CMS</span>
                     </a>
                 </div>
-                <ul class="sidebar-menu nav flex-column mt-3">
+                <ul class="sidebar-menu nav flex-column mt-3 nav-vertical">
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Admin" asp-controller="Admin" asp-action="Index">
                             <i class="fas fa-tachometer-alt"></i>
@@ -66,7 +66,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="header">
+            <div class="header topbar">
                 <div class="header-content">
                     <button class="sidebar-toggle" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content">
+            <div class="content fade-in">
                 @RenderBody()
             </div>
         </div>
@@ -84,7 +84,7 @@
 
     <footer class="border-top footer text-muted fixed-bottom">
         <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center py-2">
+            <div class="d-flex justify-content-between align-items-center py-2 small">
                 <span>&copy; @DateTime.Now.Year - Kurumsal CMS Admin Panel</span>
                 <span class="text-end">
                     <i class="fas fa-user me-1"></i>
