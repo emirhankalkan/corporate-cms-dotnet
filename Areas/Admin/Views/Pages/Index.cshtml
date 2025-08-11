@@ -4,105 +4,67 @@
     ViewData["Title"] = "Sayfalar";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Sayfalar</h1>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Yeni Sayfa Ekle
-    </a>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        @if (!Model.Any())
-        {
-            <div class="text-center py-5">
-                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">Henüz sayfa eklenmemiş</h5>
-                <p class="text-muted">İlk sayfanızı oluşturmak için "Yeni Sayfa Ekle" butonuna tıklayın.</p>
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Yeni Sayfa Ekle
-                </a>
-            </div>
-        }
-        else
-        {
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Başlık</th>
-                            <th>URL</th>
-                            <th>Durum</th>
-                            <th>Ana Sayfa</th>
-                            <th>Görüntülenme</th>
-                            <th>Oluşturulma</th>
-                            <th width="200">İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h1 class="h3 fw-semibold m-0">Sayfalar</h1>
+        <a asp-action="Create" class="btn-app"><i class="fas fa-plus"></i> Yeni Sayfa</a>
+    </div>
+    <div class="card-app p-0 overflow-hidden">
+        <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);">
+            <span class="small fw-semibold text-uppercase" style="letter-spacing:.5px;">Liste</span>
+        </div>
+        <div class="p-0">
+            @if (!Model.Any()){
+                <div class="p-5 text-center">
+                    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                    <h5 class="u-muted mb-2">Henüz sayfa eklenmemiş</h5>
+                    <p class="u-muted small mb-3">İlk sayfanızı oluşturmak için "Yeni Sayfa" butonuna tıklayın.</p>
+                    <a asp-action="Create" class="btn-app btn-app-outline"><i class="fas fa-plus"></i> Yeni Sayfa Ekle</a>
+                </div>
+            } else {
+                <div class="table-responsive">
+                    <table class="table-app w-100">
+                        <thead>
                             <tr>
-                                <td>
-                                    <strong>@item.Title</strong>
-                                    @if (!string.IsNullOrEmpty(item.MetaDescription))
-                                    {
-                                        <br><small class="text-muted">@item.MetaDescription.Substring(0, Math.Min(80, item.MetaDescription.Length))...</small>
+                                <th>Başlık</th>
+                                <th>URL</th>
+                                <th>Durum</th>
+                                <th>Ana Sayfa</th>
+                                <th>Görüntülenme</th>
+                                <th>Oluşturulma</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model){
+                            <tr>
+                                <td class="fw-medium">
+                                    @item.Title
+                                    @if (!string.IsNullOrEmpty(item.MetaDescription)){
+                                        <div class="small u-muted mt-1">@item.MetaDescription.Substring(0, Math.Min(80, item.MetaDescription.Length))...</div>
                                     }
                                 </td>
+                                <td><code>/@item.Slug</code></td>
                                 <td>
-                                    <code>/@item.Slug</code>
+                                    @if (item.IsActive){<span class="badge-app badge-soft" style="background:var(--color-success-soft); color:var(--color-success-contrast);">Aktif</span>} else {<span class="badge-app badge-outline">Pasif</span>}
                                 </td>
-                                <td>
-                                    @if (item.IsActive)
-                                    {
-                                        <span class="badge bg-success">Aktif</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">Pasif</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.IsHomePage)
-                                    {
-                                        <span class="badge bg-primary">Ana Sayfa</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">-</span>
-                                    }
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">@item.ViewCount</span>
-                                </td>
-                                <td>
-                                    <small>@item.CreatedDate.ToString("dd.MM.yyyy")</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info" title="Detaylar">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Düzenle">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Sil" data-confirm-delete>
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                        @if (item.IsActive)
-                                        {
-                                            <a href="/@item.Slug" class="btn btn-outline-success" title="Görüntüle" target="_blank">
-                                                <i class="fas fa-external-link-alt"></i>
-                                            </a>
-                                        }
+                                <td>@if (item.IsHomePage){<span class="badge-app badge-soft" style="background:var(--color-primary-soft); color:var(--color-primary);">Ana</span>} else {<span class="u-muted small">-</span>}</td>
+                                <td><span class="badge-app badge-outline">@item.ViewCount</span></td>
+                                <td class="small">@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                                <td class="text-end">
+                                    <div class="d-flex gap-1 justify-content-end flex-wrap">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-app btn-app-soft btn-sm" title="Detaylar"><i class="fas fa-eye"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-app btn-app-soft btn-sm" title="Düzenle"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-app btn-app-danger btn-sm" title="Sil" data-confirm-delete><i class="fas fa-trash"></i></a>
+                                        @if (item.IsActive){<a href="/@item.Slug" class="btn-app btn-app-outline btn-sm" title="Görüntüle" target="_blank"><i class="fas fa-external-link-alt"></i></a>}
                                     </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
-        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
     </div>
 </div>

@@ -4,112 +4,90 @@
     ViewData["Title"] = "Yeni Sayfa Ekle";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Yeni Sayfa Ekle</h1>
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left"></i> Geri Dön
-    </a>
-</div>
-
-<form asp-action="Create" method="post">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Sayfa İçeriği</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label asp-for="Title" class="form-label"></label>
-                        <input asp-for="Title" class="form-control" placeholder="Sayfa başlığını girin" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Slug" class="form-label"></label>
-                        <div class="input-group">
-                            <span class="input-group-text">@Context.Request.Scheme://@Context.Request.Host/</span>
-                            <input asp-for="Slug" class="form-control" placeholder="url-adresi" />
-                        </div>
-                        <div class="form-text">Boş bırakılırsa başlıktan otomatik oluşturulur.</div>
-                        <span asp-validation-for="Slug" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Content" class="form-label"></label>
-                        <textarea asp-for="Content" class="form-control rich-text-editor" rows="15"></textarea>
-                        <span asp-validation-for="Content" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Sayfa Ayarları</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
-                            <label asp-for="IsActive" class="form-check-label"></label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input asp-for="IsHomePage" class="form-check-input" type="checkbox" />
-                            <label asp-for="IsHomePage" class="form-check-label"></label>
-                        </div>
-                        <div class="form-text">Bu sayfa ana sayfa olarak ayarlanır.</div>
-                    </div>
-
-                    <hr>
-
-                    <h6 class="mb-3">SEO Ayarları</h6>
-
-                    <div class="mb-3">
-                        <label asp-for="MetaDescription" class="form-label"></label>
-                        <textarea asp-for="MetaDescription" class="form-control" rows="3" placeholder="Sayfa hakkında kısa açıklama"></textarea>
-                        <span asp-validation-for="MetaDescription" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="MetaKeywords" class="form-label"></label>
-                        <input asp-for="MetaKeywords" class="form-control" placeholder="anahtar, kelimeler, virgül, ile" />
-                        <span asp-validation-for="MetaKeywords" class="text-danger"></span>
-                    </div>
-
-                    <hr>
-
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Sayfayı Kaydet
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+        <h1 class="h3 fw-semibold m-0">Yeni Sayfa Ekle</h1>
+        <a asp-action="Index" class="btn-app btn-app-outline btn-sm"><i class="fas fa-arrow-left"></i> Geri Dön</a>
     </div>
-</form>
+
+    <form asp-action="Create" method="post" class="form-app-modern" novalidate>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card-app p-0 overflow-hidden mb-4">
+                    <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);">
+                        <h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Sayfa İçeriği</h2>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-medium"></label>
+                            <input asp-for="Title" class="form-control" placeholder="Sayfa başlığını girin" />
+                            <span asp-validation-for="Title" class="field-error small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label fw-medium"></label>
+                            <div class="input-group">
+                                <span class="input-group-text small" style="background:var(--color-surface-alt); border-color:var(--color-border);">@Context.Request.Scheme://@Context.Request.Host/</span>
+                                <input asp-for="Slug" class="form-control" placeholder="url-adresi" />
+                            </div>
+                            <div class="form-text">Boş bırakılırsa başlıktan otomatik oluşturulur.</div>
+                            <span asp-validation-for="Slug" class="field-error small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label fw-medium"></label>
+                            <textarea asp-for="Content" class="form-control rich-text-editor" rows="15"></textarea>
+                            <span asp-validation-for="Content" class="field-error small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-app p-0 overflow-hidden mb-4">
+                    <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);">
+                        <h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Ayarlar & SEO</h2>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsActive" class="form-check-label small"></label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsHomePage" class="form-check-input" type="checkbox" />
+                            <label asp-for="IsHomePage" class="form-check-label small"></label>
+                            <div class="form-text">Bu sayfa ana sayfa olarak ayarlanır.</div>
+                        </div>
+                        <div class="u-divider my-3"></div>
+                        <h6 class="small fw-semibold text-uppercase mb-3" style="letter-spacing:.5px;">SEO</h6>
+                        <div class="mb-3">
+                            <label asp-for="MetaDescription" class="form-label fw-medium"></label>
+                            <textarea asp-for="MetaDescription" class="form-control" rows="3" placeholder="Sayfa hakkında kısa açıklama"></textarea>
+                            <span asp-validation-for="MetaDescription" class="field-error small"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="MetaKeywords" class="form-label fw-medium"></label>
+                            <input asp-for="MetaKeywords" class="form-control" placeholder="anahtar, kelimeler, virgül, ile" />
+                            <span asp-validation-for="MetaKeywords" class="field-error small"></span>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn-app"><i class="fas fa-save"></i> Kaydet</button>
+                            <a asp-action="Index" class="btn-app btn-app-outline"><i class="fas fa-times"></i> İptal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
     <script>
-        // TinyMCE rich text editor initialization
         if (typeof tinymce !== 'undefined') {
             tinymce.init({
                 selector: '.rich-text-editor',
                 height: 400,
-                plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'help', 'wordcount'
-                ],
-                toolbar: 'undo redo | blocks | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image | code fullscreen',
-                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; line-height: 1.4; }',
+                plugins: 'advlist autolink lists link image charmap anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+                toolbar: 'undo redo | blocks | bold italic forecolor backcolor | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | link image | code fullscreen',
+                content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px; line-height:1.5; }',
                 language: 'tr'
             });
         }
