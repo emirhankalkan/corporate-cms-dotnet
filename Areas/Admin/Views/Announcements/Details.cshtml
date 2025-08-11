@@ -5,133 +5,72 @@
 }
 
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
-        <div>
-            <a href="@Url.Action("Edit", new { id = Model.Id })" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
-                <i class="fas fa-edit fa-sm text-white-50"></i> Düzenle
-            </a>
-            <a href="@Url.Action("Index")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Geri Dön
-            </a>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+        <h1 class="h3 fw-semibold m-0">@ViewData["Title"]</h1>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn-app btn-app-soft btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
+            <a href="@Url.Action("Index")" class="btn-app btn-app-outline btn-sm"><i class="fas fa-arrow-left"></i> Geri Dön</a>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">@Model.Title</h6>
+            <div class="card-app p-0 overflow-hidden mb-4">
+                <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);">
+                    <h2 class="h5 fw-semibold m-0 d-flex align-items-center gap-2">@Model.Title @if(Model.IsPinned){<span class="badge-app badge-soft" style="background:var(--color-warning-soft); color:var(--color-warning-contrast);">Sabit</span>}</h2>
                 </div>
-                <div class="card-body">
-                    @if (!string.IsNullOrEmpty(Model.ImagePath))
-                    {
-                        <div class="text-center mb-4">
-                            <img src="@Model.ImagePath" alt="@Model.Title" class="img-fluid rounded" style="max-height: 400px;" />
+                <div class="p-4">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath)){
+                        <div class="mb-4 ratio ratio-21x9" style="--bs-aspect-ratio:45%; background:var(--color-surface-alt);">
+                            <img src="@Model.ImagePath" alt="@Model.Title" style="object-fit:cover; width:100%; height:100%; border-radius:var(--color-radius-md);" />
                         </div>
                     }
-
-                    @if (!string.IsNullOrEmpty(Model.Summary))
-                    {
-                        <div class="alert alert-info">
-                            <h6 class="font-weight-bold">Özet:</h6>
-                            <p class="mb-0">@Model.Summary</p>
+                    @if (!string.IsNullOrEmpty(Model.Summary)){
+                        <div class="p-3 rounded border mb-4" style="background:var(--color-primary-soft); border-color:var(--color-border);">
+                            <p class="m-0 small fw-semibold">@Model.Summary</p>
                         </div>
                     }
-
-                    <div class="content">
+                    <div class="prose-app content-body mb-4">
                         @Html.Raw(Model.Content)
                     </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Tags))
-                    {
-                        <div class="mt-4">
-                            <h6 class="font-weight-bold">Etiketler:</h6>
-                            @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries))
-                            {
-                                <span class="badge badge-secondary mr-1">@tag.Trim()</span>
-                            }
+                    @if (!string.IsNullOrEmpty(Model.Tags)){
+                        <div class="pt-3 border-top">
+                            <div class="small fw-semibold u-muted mb-2">Etiketler</div>
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach (var tag in Model.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries)){
+                                    <span class="badge-app badge-outline">@tag.Trim()</span>
+                                }
+                            </div>
                         </div>
                     }
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-info">Duyuru Bilgileri</h6>
-                </div>
-                <div class="card-body">
-                    <dl class="row">
-                        <dt class="col-sm-6">Durum:</dt>
-                        <dd class="col-sm-6">
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge badge-success">Aktif</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-danger">Pasif</span>
-                            }
-                        </dd>
-
-                        <dt class="col-sm-6">Sabitlenmiş:</dt>
-                        <dd class="col-sm-6">
-                            @if (Model.IsPinned)
-                            {
-                                <span class="badge badge-warning">Evet</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-secondary">Hayır</span>
-                            }
-                        </dd>
-
-                        <dt class="col-sm-6">Yayın Tarihi:</dt>
-                        <dd class="col-sm-6">@Model.PublishDate?.ToString("dd.MM.yyyy HH:mm")</dd>
-
-                        <dt class="col-sm-6">Oluşturma:</dt>
-                        <dd class="col-sm-6">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
-
-                        <dt class="col-sm-6">Oluşturan:</dt>
-                        <dd class="col-sm-6">@Model.CreatedBy</dd>
-
-                        @if (Model.UpdatedDate.HasValue)
-                        {
-                            <dt class="col-sm-6">Son Güncelleme:</dt>
-                            <dd class="col-sm-6">@Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm")</dd>
-                        }
-
-                        @if (!string.IsNullOrEmpty(Model.UpdatedBy))
-                        {
-                            <dt class="col-sm-6">Güncelleyen:</dt>
-                            <dd class="col-sm-6">@Model.UpdatedBy</dd>
-                        }
-
-                        <dt class="col-sm-6">Görüntülenme:</dt>
-                        <dd class="col-sm-6">
-                            <span class="badge badge-info">@Model.ViewCount</span>
-                        </dd>
+        <div class="col-lg-4 d-flex flex-column gap-4">
+            <div class="card-app p-0">
+                <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Bilgiler</h2></div>
+                <div class="p-4 small u-muted">
+                    <dl class="row mb-0">
+                        <dt class="col-6">Durum</dt>
+                        <dd class="col-6">@if(Model.IsActive){<span class="badge-app badge-soft" style="background:var(--color-success-soft); color:var(--color-success-contrast);">Aktif</span>} else {<span class="badge-app badge-outline">Pasif</span>}</dd>
+                        <dt class="col-6">Sabit</dt>
+                        <dd class="col-6">@if(Model.IsPinned){<span class="badge-app badge-soft" style="background:var(--color-warning-soft); color:var(--color-warning-contrast);">Evet</span>} else {<span class="u-muted">Hayır</span>}</dd>
+                        <dt class="col-6">Yayın</dt><dd class="col-6">@Model.PublishDate?.ToString("dd.MM.yyyy HH:mm")</dd>
+                        <dt class="col-6">Oluşturma</dt><dd class="col-6">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                        <dt class="col-6">Oluşturan</dt><dd class="col-6">@Model.CreatedBy</dd>
+                        @if (Model.UpdatedDate.HasValue){<dt class="col-6">Son Güncelleme</dt><dd class="col-6">@Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm")</dd>}
+                        @if (!string.IsNullOrEmpty(Model.UpdatedBy)){<dt class="col-6">Güncelleyen</dt><dd class="col-6">@Model.UpdatedBy</dd>}
+                        <dt class="col-6">Görüntülenme</dt><dd class="col-6"><span class="badge-app badge-outline">@Model.ViewCount</span></dd>
                     </dl>
                 </div>
             </div>
-
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-info">İşlemler</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Düzenle
-                        </a>
-                        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i> Sil
-                        </a>
-                        <a href="@Url.Action("Index")" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-list"></i> Listeye Dön
-                        </a>
+            <div class="card-app p-0">
+                <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">İşlemler</h2></div>
+                <div class="p-4">
+                    <div class="d-flex flex-column gap-2">
+                        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn-app btn-app-soft btn-sm"><i class="fas fa-edit"></i> Düzenle</a>
+                        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn-app btn-app-danger btn-sm"><i class="fas fa-trash"></i> Sil</a>
+                        <a href="@Url.Action("Index")" class="btn-app btn-app-outline btn-sm"><i class="fas fa-list"></i> Liste</a>
                     </div>
                 </div>
             </div>
