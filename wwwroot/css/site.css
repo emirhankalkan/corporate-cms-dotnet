@@ -1,5 +1,13 @@
-/* Base Styles */
+/* Not: Bu dosya artık kullanılmıyor. Stiller simple-style.css'e taşındı */
 
+
+/* Eski kodlar referans için tutuldu ancak kullanılmıyor */
+
+
+/* Base Styles - Deprecated */
+
+
+/*
 html {
     font-size: 14px;
     position: relative;
@@ -19,6 +27,7 @@ body {
     color: #333;
     background-color: #f8f9fa;
 }
+*/
 
 
 /* Focus Styles */
@@ -374,6 +383,21 @@ footer {
     }
     .display-4 {
         font-size: 2.5rem;
+    }
+    /* Responsive düzeltmeler */
+    .sidebar {
+        width: 100%;
+        position: relative;
+    }
+    .content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+    .navbar-brand img {
+        max-width: 180px;
+    }
+    .admin-sidebar {
+        min-height: auto !important;
     }
 }
 

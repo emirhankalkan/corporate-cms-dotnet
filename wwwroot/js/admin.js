@@ -7,10 +7,27 @@
     const sidebar = document.querySelector('.sidebar');
 
     if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', function() {
+        sidebarToggle.addEventListener('click', function(e) {
+            e.preventDefault();
             sidebar.classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
         });
     }
+
+    // Handle responsive behavior
+    function handleResponsiveLayout() {
+        if (window.innerWidth <= 768) {
+            sidebar ? .classList.add('collapsed');
+            document.querySelector('.main-content') ? .classList.add('expanded');
+        } else {
+            sidebar ? .classList.remove('collapsed');
+            document.querySelector('.main-content') ? .classList.remove('expanded');
+        }
+    }
+
+    // Initialize responsive behavior
+    handleResponsiveLayout();
+    window.addEventListener('resize', handleResponsiveLayout);
 
     // Auto-hide alerts after 5 seconds
     const alerts = document.querySelectorAll('.alert');
@@ -27,18 +44,13 @@
         }, 5000);
     });
 
-    // Initialize TinyMCE for content areas
+    // Initialize TinyMCE for content areas (Basitleştirilmiş)
     if (typeof tinymce !== 'undefined') {
         tinymce.init({
             selector: '.rich-text-editor',
-            height: 400,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+            height: 350,
+            plugins: ['advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'code', 'table'],
+            toolbar: 'undo redo | formatselect | bold italic | bullist numlist | link image | code',
             language: 'tr',
             setup: function(editor) {
                 editor.on('change', function() {

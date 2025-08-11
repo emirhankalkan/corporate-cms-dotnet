@@ -2,58 +2,90 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-user me-1"></i>
-            @User.Identity?.Name
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+    <div class="user-dropdown dropdown">
+        <button class="user-dropdown-toggle dropdown-toggle d-flex align-items-center" type="button" id="userDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="user-avatar">
+                @{
+                    var nameParts = User.Identity?.Name?.Split('@')[0]?.ToUpper();
+                    var initials = nameParts?.Length > 0 ? nameParts[0].ToString() : "U";
+                }
+                @initials
+            </div>
+            <span class="d-none d-md-block">@User.Identity?.Name?.Split('@')[0]</span>
+            <i class="fas fa-chevron-down dropdown-icon ms-2 opacity-50"></i>
+        </button>
+        <ul class="user-dropdown-menu dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownMenu">
+            <li class="px-3 py-2 mb-1">
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-2">@initials</div>
+                    <div>
+                        <div class="fw-bold">@User.Identity?.Name</div>
+                        <div class="text-muted small">
+                            @if (User.IsInRole("SuperAdmin"))
+                            {
+                                <span>Süper Admin</span>
+                            }
+                            else if (User.IsInRole("Admin"))
+                            {
+                                <span>Admin</span>
+                            }
+                            else
+                            {
+                                <span>Kullanıcı</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <div class="user-dropdown-divider"></div>
+            
             @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
             {
                 <li>
-                    <a class="dropdown-item" asp-area="Admin" asp-controller="Admin" asp-action="Index">
-                        <i class="fas fa-cog me-2"></i>Yönetim Paneli
+                    <a class="user-dropdown-item text-decoration-none" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                        <i class="fas fa-cog"></i>Yönetim Paneli
                     </a>
                 </li>
             }
             else
             {
                 <li>
-                    <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Dashboard">
-                        <i class="fas fa-user-cog me-2"></i>Kullanıcı Paneli
+                    <a class="user-dropdown-item text-decoration-none" asp-area="" asp-controller="User" asp-action="Dashboard">
+                        <i class="fas fa-user-cog"></i>Kullanıcı Paneli
                     </a>
                 </li>
             }
+            
             <li>
-                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Profile">
-                    <i class="fas fa-user-edit me-2"></i>Profil Ayarları
+                <a class="user-dropdown-item text-decoration-none" asp-area="" asp-controller="User" asp-action="Profile">
+                    <i class="fas fa-user-edit"></i>Profil Ayarları
                 </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            
+            <div class="user-dropdown-divider"></div>
+            
             <li>
-                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap
+                <form class="m-0" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="user-dropdown-item user-dropdown-logout w-100 text-start border-0 bg-transparent">
+                        <i class="fas fa-sign-out-alt"></i>Çıkış Yap
                     </button>
                 </form>
             </li>
         </ul>
-    </li>
+    </div>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Register">
-            <i class="fas fa-user-plus me-1"></i>Kayıt Ol
+    <div class="auth-buttons">
+        <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-auth btn-login">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            <span>Giriş Yap</span>
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Login">
-            <i class="fas fa-sign-in-alt me-1"></i>Giriş Yap
+        <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-auth btn-register">
+            <i class="fas fa-user-plus me-2"></i>
+            <span>Kayıt Ol</span>
         </a>
-    </li>
+    </div>
 }
-</ul>

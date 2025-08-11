@@ -1,4 +1,5 @@
 /* Admin Panel Styles */
+
 .wrapper {
     display: flex;
     min-height: 100vh;
@@ -9,7 +10,7 @@
     background: #2c3e50;
     color: #ecf0f1;
     transition: all 0.3s;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.collapsed {
@@ -72,7 +73,7 @@
 
 .header {
     background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
 
@@ -101,10 +102,12 @@
     padding: 1.5rem;
 }
 
+
 /* Cards */
+
 .card {
     border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     margin-bottom: 1rem;
 }
 
@@ -114,7 +117,9 @@
     font-weight: 600;
 }
 
+
 /* Tables */
+
 .table {
     background: #fff;
 }
@@ -125,7 +130,9 @@
     color: #495057;
 }
 
+
 /* Buttons */
+
 .btn-primary {
     background-color: #3498db;
     border-color: #3498db;
@@ -156,13 +163,17 @@
     border-color: #c0392b;
 }
 
+
 /* Forms */
+
 .form-control:focus {
     border-color: #3498db;
     box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
 }
 
+
 /* Status badges */
+
 .badge.bg-success {
     background-color: #27ae60 !important;
 }
@@ -175,7 +186,9 @@
     background-color: #f39c12 !important;
 }
 
+
 /* Dashboard stats */
+
 .stats-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -195,7 +208,9 @@
     opacity: 0.8;
 }
 
+
 /* Responsive */
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
@@ -205,17 +220,29 @@
         z-index: 1050;
         transition: left 0.3s;
     }
-    
     .sidebar.show {
         left: 0;
     }
-    
     .main-content {
         width: 100%;
     }
+    .wrapper {
+        flex-direction: column;
+    }
+    .content {
+        padding: 1rem;
+    }
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+    .table-responsive {
+        border: 0;
+    }
 }
 
+
 /* TinyMCE editor styling */
+
 .tox-tinymce {
     border: 1px solid #ced4da !important;
     border-radius: 0.25rem !important;

@@ -21,6 +21,19 @@
                     fixLink(button);
                 }
             });
+
+            // Form action kontrolleri
+            const forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                const action = form.getAttribute('action');
+                if (action && !action.startsWith('/') && !action.startsWith('http') && !action.startsWith('#') && !action.includes('/Admin/')) {
+                    if (action.includes('/')) {
+                        form.setAttribute('action', '/Admin' + action);
+                    } else {
+                        form.setAttribute('action', '/Admin/' + action);
+                    }
+                }
+            });
         }
     }
 
@@ -35,10 +48,8 @@
                 // Controller/Action formatında mı?
                 if (href.includes('/')) {
                     element.setAttribute('href', '/Admin' + href);
-                    console.log('Düzeltildi:', href, ' => ', '/Admin' + href);
                 } else {
                     element.setAttribute('href', '/Admin/' + href);
-                    console.log('Düzeltildi:', href, ' => ', '/Admin/' + href);
                 }
             }
         }

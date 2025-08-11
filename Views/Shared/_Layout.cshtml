@@ -10,46 +10,54 @@
     <title>@ViewData["Title"] - Kurumsal CMS</title>
     <meta name="description" content="@ViewData["MetaDescription"]" />
     <meta name="keywords" content="@ViewData["MetaKeywords"]" />
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/simple-style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar-modern.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="~/CorporateCMS.styles.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     @await RenderSectionAsync("Styles", required: false)
-    <style>
-        h1, h2, h3, h4, h5, h6, .navbar-brand {
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <nav class="navbar-modern navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-building me-2"></i>
-                    Kurumsal CMS
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Menü">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <a class="navbar-brand-modern text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
+                        <span class="brand-icon">
+                            <i class="fas fa-building"></i>
+                        </span>
+                        Kurumsal CMS
+                    </a>
+                    <button class="navbar-toggler-modern d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarModern" aria-controls="navbarModern" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="collapse navbar-collapse navbar-collapse-modern mt-2 mt-lg-0" id="navbarModern">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-home me-1"></i>Ana Sayfa
+                            <a class="nav-link-modern @(Context.Request.Path == "/" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home nav-icon"></i>
+                                <span>Ana Sayfa</span>
                             </a>
                         </li>
-                        <!-- Dinamik menü buraya eklenecek -->
+                        <li class="nav-item">
+                            <a class="nav-link-modern @(Context.Request.Path.StartsWithSegments("/Page") ? "active" : "")" asp-area="" asp-controller="Page" asp-action="Index">
+                                <i class="fas fa-file-alt nav-icon"></i>
+                                <span>Sayfalar</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-modern @(Context.Request.Path.StartsWithSegments("/Announcement") ? "active" : "")" asp-area="" asp-controller="Announcement" asp-action="Index">
+                                <i class="fas fa-bullhorn nav-icon"></i>
+                                <span>Duyurular</span>
+                            </a>
+                        </li>
                     </ul>
-                    <div class="d-flex align-items-center">
+                    
+                    <div class="ms-auto">
                         <partial name="_LoginPartial" />
                     </div>
                 </div>
@@ -61,100 +69,32 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-dark text-light py-5 mt-5">
+    <footer class="footer-simple mt-4">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-primary p-2 rounded-circle me-2">
-                            <i class="fas fa-building text-white"></i>
-                        </div>
-                        <h5 class="mb-0 fw-bold">Kurumsal CMS</h5>
-                    </div>
-                    <p class="mb-4 opacity-75">
-                        Modern ASP.NET MVC tabanlı içerik yönetim sistemi ile kurumsal web sitenizi kolayca yönetin.
+                <div class="col-md-6 mb-3">
+                    <h5 class="mb-2">Kurumsal CMS</h5>
+                    <p class="text-muted small">
+                        ASP.NET Core içerik yönetim sistemi.
                     </p>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white bg-primary p-2 rounded-circle"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-white bg-info p-2 rounded-circle"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white bg-danger p-2 rounded-circle"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-white bg-primary p-2 rounded-circle"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
                 </div>
-                <div class="col-lg-3 mb-4 ps-lg-4">
-                    <h5 class="mb-4 fw-bold">Hızlı Bağlantılar</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <a href="/" class="text-decoration-none d-flex align-items-center">
-                                <i class="fas fa-chevron-right me-2 text-primary"></i>
-                                <span>Ana Sayfa</span>
-                            </a>
-                        </li>
+                <div class="col-md-6 mb-3 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="/" class="text-decoration-none text-muted">Ana Sayfa</a></li>
+                        <li class="list-inline-item"><a asp-area="" asp-controller="Page" asp-action="Index" class="text-decoration-none text-muted">Sayfalar</a></li>
+                        <li class="list-inline-item"><a asp-area="" asp-controller="Announcement" asp-action="Index" class="text-decoration-none text-muted">Duyurular</a></li>
                         @if (SignInManager.IsSignedIn(User) && (User.IsInRole("SuperAdmin") || User.IsInRole("Admin")))
                         {
-                            <li class="mb-2">
-                                <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="text-decoration-none d-flex align-items-center">
-                                    <i class="fas fa-chevron-right me-2 text-primary"></i>
-                                    <span>Yönetim Paneli</span>
-                                </a>
-                            </li>
+                            <li class="list-inline-item"><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="text-decoration-none text-muted">Yönetim</a></li>
                         }
-                        <li class="mb-2">
-                            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none d-flex align-items-center">
-                                <i class="fas fa-chevron-right me-2 text-primary"></i>
-                                <span>Gizlilik Politikası</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
-                <div class="col-lg-5 mb-4">
-                    <h5 class="mb-4 fw-bold">İletişim</h5>
-                    <div>
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="bg-primary p-2 rounded-3 me-3">
-                                <i class="fas fa-envelope text-white"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 opacity-75">Email</p>
-                                <p class="mb-0 fw-medium">info@kurumsalcms.com</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="bg-primary p-2 rounded-3 me-3">
-                                <i class="fas fa-phone text-white"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 opacity-75">Telefon</p>
-                                <p class="mb-0 fw-medium">+90 (212) 555 0123</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="bg-primary p-2 rounded-3 me-3">
-                                <i class="fas fa-map-marker-alt text-white"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 opacity-75">Adres</p>
-                                <p class="mb-0 fw-medium">İstanbul, Türkiye</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <hr class="my-4 border-secondary opacity-25">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="mb-0 opacity-75">
-                        &copy; @DateTime.Now.Year - Kurumsal CMS - Tüm hakları saklıdır.
-                    </p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="d-flex justify-content-md-end align-items-center">
-                        <span class="badge bg-primary me-2">v1.0</span>
-                        <small class="opacity-75">
-                            ASP.NET MVC (.NET 9) ile geliştirilmiştir.
-                        </small>
-                    </div>
-                </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="text-muted mb-0 small">
+                    &copy; @DateTime.Now.Year - Kurumsal CMS
+                </p>
             </div>
         </div>
     </footer>
@@ -162,6 +102,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/validation.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

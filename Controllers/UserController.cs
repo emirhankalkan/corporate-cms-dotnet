@@ -39,8 +39,8 @@ namespace CorporateCMS.Controllers
             
             var model = new UserDashboardViewModel
             {
-                Email = user.Email,
-                UserName = user.UserName,
+                Email = user.Email ?? string.Empty,
+                UserName = user.UserName ?? string.Empty,
                 Roles = roles
             };
             
@@ -58,8 +58,8 @@ namespace CorporateCMS.Controllers
 
             var model = new UserProfileViewModel
             {
-                Email = user.Email,
-                UserName = user.UserName
+                Email = user.Email ?? string.Empty,
+                UserName = user.UserName ?? string.Empty
             };
             
             return View(model);

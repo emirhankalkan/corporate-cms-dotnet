@@ -4,50 +4,86 @@
     ViewData["Title"] = "Giriş Yap";
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-sign-in-alt me-2"></i>
-                        Giriş Yap
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" placeholder="E-posta adresinizi girin" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" placeholder="Şifrenizi girin" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="mb-3 form-check">
-                            <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label"></label>
-                        </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-sign-in-alt me-1"></i>
-                                Giriş Yap
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <p class="mb-0">
-                        Hesabınız yok mu? 
-                        <a asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]">Kayıt Ol</a>
-                    </p>
+<link rel="stylesheet" href="~/css/auth-style.css" />
+
+<div class="auth-container">
+    <div class="auth-bg-shape"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h4>
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Hesabınıza Giriş Yapın
+                        </h4>
+                        <p>Kurumsal CMS yönetim sistemine erişim sağlayın</p>
+                    </div>
+                    <div class="auth-body">
+                        <form asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                            <div asp-validation-summary="ModelOnly" class="auth-validation-error mb-3"></div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="Email" class="auth-form-label">E-posta Adresiniz</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-envelope text-primary"></i>
+                                    </span>
+                                    <input asp-for="Email" class="form-control auth-input" placeholder="mail@example.com" />
+                                </div>
+                                <span asp-validation-for="Email" class="auth-validation-error"></span>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label asp-for="Password" class="auth-form-label">Şifreniz</label>
+                                    <a href="#" class="auth-link small">Şifremi Unuttum</a>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-lock text-primary"></i>
+                                    </span>
+                                    <input asp-for="Password" class="form-control auth-input" placeholder="••••••••" />
+                                </div>
+                                <span asp-validation-for="Password" class="auth-validation-error"></span>
+                            </div>
+                            
+                            <div class="mb-4 form-check auth-check">
+                                <input asp-for="RememberMe" class="form-check-input auth-check-input" />
+                                <label asp-for="RememberMe" class="form-check-label auth-check-label">Beni hatırla</label>
+                            </div>
+                            
+                            <div class="d-grid mb-4">
+                                <button type="submit" class="btn auth-btn auth-btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>
+                                    Giriş Yap
+                                </button>
+                            </div>
+                            
+                            <div class="auth-divider">
+                                <div class="auth-divider-line"></div>
+                                <div class="auth-divider-text">veya</div>
+                                <div class="auth-divider-line"></div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                                            <a href="#" class="auth-social-btn google-auth-btn">
+                                <i class="fab fa-google text-danger"></i>
+                                Google ile Giriş Yap
+                            </a>
+                                <a href="#" class="auth-social-btn">
+                                    <i class="fab fa-microsoft text-primary"></i>
+                                    Microsoft ile Giriş Yap
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="auth-footer">
+                        <p class="mb-0">
+                            Hesabınız yok mu? 
+                            <a asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="auth-link">Hemen Kayıt Olun</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,4 +92,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/google-auth.js"></script>
 }

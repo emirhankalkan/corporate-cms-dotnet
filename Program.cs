@@ -1,8 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using CorporateCMS.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Kestrel sunucusunu yapılandır
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5084); // Tüm IP adreslerinden 5084 portunu dinle
+});
 
 // Add services to the container
 // Kurumsal CMS - ASP.NET MVC Uygulaması
@@ -26,6 +33,16 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
 .AddRoles<IdentityRole>() // Rol desteği ekle
 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Add Google Authentication
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        var googleAuthSection = builder.Configuration.GetSection("Authentication:Google");
+        options.ClientId = googleAuthSection["ClientId"] ?? string.Empty;
+        options.ClientSecret = googleAuthSection["ClientSecret"] ?? string.Empty;
+        options.CallbackPath = "/signin-google"; // Default callback path
+    });
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages(); 
@@ -59,7 +76,11 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Development ortamında HTTPS yönlendirmesini devre dışı bırakma
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 
 app.UseRouting();

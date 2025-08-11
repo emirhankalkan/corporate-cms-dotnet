@@ -4,51 +4,100 @@
     ViewData["Title"] = "Kayıt Ol";
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-user-plus me-2"></i>
-                        Kayıt Ol
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" placeholder="E-posta adresinizi girin" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+<link rel="stylesheet" href="~/css/auth-style.css" />
+
+<div class="auth-container">
+    <div class="auth-bg-shape"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h4>
+                            <i class="fas fa-user-plus me-2"></i>
+                            Hesap Oluşturun
+                        </h4>
+                        <p>Kurumsal CMS sistemine ücretsiz kayıt olun</p>
+                    </div>
+                    <div class="auth-body">
+                        <div class="d-grid gap-2 mb-4">
+                            <a href="#" class="auth-social-btn google-auth-btn">
+                                <i class="fab fa-google text-danger"></i>
+                                Google ile Kayıt Ol
+                            </a>
+                            <a href="#" class="auth-social-btn">
+                                <i class="fab fa-microsoft text-primary"></i>
+                                Microsoft ile Kayıt Ol
+                            </a>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" placeholder="Şifrenizi girin" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                        <div class="auth-divider">
+                            <div class="auth-divider-line"></div>
+                            <div class="auth-divider-text">veya e-posta ile kayıt ol</div>
+                            <div class="auth-divider-line"></div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="ConfirmPassword" class="form-label"></label>
-                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Şifrenizi tekrar girin" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-user-plus me-1"></i>
-                                Kayıt Ol
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <p class="mb-0">
-                        Zaten hesabınız var mı? 
-                        <a asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]">Giriş Yap</a>
-                    </p>
+                        <form asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+                            <div asp-validation-summary="ModelOnly" class="auth-validation-error mb-3"></div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="Email" class="auth-form-label">E-posta Adresiniz</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-envelope text-success"></i>
+                                    </span>
+                                    <input asp-for="Email" class="form-control auth-input" placeholder="mail@example.com" />
+                                </div>
+                                <span asp-validation-for="Email" class="auth-validation-error"></span>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="Password" class="auth-form-label">Şifreniz</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-lock text-success"></i>
+                                    </span>
+                                    <input asp-for="Password" class="form-control auth-input" placeholder="En az 8 karakter" />
+                                </div>
+                                <span asp-validation-for="Password" class="auth-validation-error"></span>
+                                <small class="text-muted mt-1 d-block" style="font-size: 0.8rem;">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    En az 8 karakter (büyük/küçük harf, rakam, özel karakter)
+                                </small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label asp-for="ConfirmPassword" class="auth-form-label">Şifre Tekrarı</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fas fa-lock text-success"></i>
+                                    </span>
+                                    <input asp-for="ConfirmPassword" class="form-control auth-input" placeholder="Şifrenizi tekrar girin" />
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="auth-validation-error"></span>
+                            </div>
+                            
+                            <div class="mb-4 form-check auth-check">
+                                <input type="checkbox" class="form-check-input auth-check-input" id="terms" required />
+                                <label class="form-check-label auth-check-label" for="terms">
+                                    <a href="#" class="auth-link">Kullanım şartlarını</a> ve <a href="#" class="auth-link">Gizlilik Politikasını</a> okudum ve kabul ediyorum.
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn auth-btn auth-btn-success">
+                                    <i class="fas fa-user-plus me-2"></i>
+                                    Hesap Oluştur
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="auth-footer">
+                        <p class="mb-0">
+                            Zaten hesabınız var mı? 
+                            <a asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" class="auth-link">Giriş Yapın</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,4 +106,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/google-auth.js"></script>
 }

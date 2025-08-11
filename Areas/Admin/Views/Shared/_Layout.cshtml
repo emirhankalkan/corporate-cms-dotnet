@@ -6,74 +6,86 @@
     <title>@ViewData["Title"] - Kurumsal CMS Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-cog me-2"></i>
-                    Kurumsal CMS Admin
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">
-                                <i class="fas fa-tachometer-alt me-1"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Pages" asp-action="Index">
-                                <i class="fas fa-file-alt me-1"></i>
-                                Sayfalar
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Menus" asp-action="Index">
-                                <i class="fas fa-bars me-1"></i>
-                                Menüler
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Sliders" asp-action="Index">
-                                <i class="fas fa-images me-1"></i>
-                                Slider
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Announcements" asp-action="Index">
-                                <i class="fas fa-bullhorn me-1"></i>
-                                Duyurular
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index" target="_blank">
-                                <i class="fas fa-external-link-alt me-1"></i>
-                                Siteyi Görüntüle
-                            </a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="#" class="d-flex align-items-center text-decoration-none">
+                        <i class="fas fa-cog"></i>
+                        <span class="ms-2">Kurumsal CMS</span>
+                    </a>
+                </div>
+                <ul class="sidebar-menu nav flex-column mt-3">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Pages" asp-action="Index">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Sayfalar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Menus" asp-action="Index">
+                            <i class="fas fa-bars"></i>
+                            <span>Menüler</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Sliders" asp-action="Index">
+                            <i class="fas fa-images"></i>
+                            <span>Slider</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Announcements" asp-action="Index">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Duyurular</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Siteyi Görüntüle</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="header-content">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-right">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container-fluid">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted fixed-bottom">
         <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center py-3">
-                <span>&copy; 2025 - Kurumsal CMS Admin Panel</span>
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <span>&copy; @DateTime.Now.Year - Kurumsal CMS Admin Panel</span>
                 <span class="text-end">
                     <i class="fas fa-user me-1"></i>
                     @User.Identity?.Name
@@ -85,6 +97,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    <script src="~/js/validation.js" asp-append-version="true"></script>
+    <script src="~/js/link-fixer.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
