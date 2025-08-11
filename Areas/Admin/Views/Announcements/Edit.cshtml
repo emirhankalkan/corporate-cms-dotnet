@@ -5,135 +5,112 @@
 }
 
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
-        <a href="@Url.Action("Index")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Geri Dön
-        </a>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+        <h1 class="h3 fw-semibold m-0">@ViewData["Title"]</h1>
+        <a href="@Url.Action("Index")" class="btn-app btn-app-outline btn-sm"><i class="fas fa-arrow-left"></i> Geri Dön</a>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Duyuru Bilgileri</h6>
+            <div class="card-app p-0 overflow-hidden mb-4">
+                <div class="border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style="background:var(--color-surface-alt);">
+                    <h2 class="h6 fw-semibold m-0 text-uppercase tracking-wide" style="letter-spacing:.5px;">Duyuru Bilgileri</h2>
                 </div>
-                <div class="card-body">
-                    <form asp-action="Edit" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        
+                <div class="p-4">
+                    <form asp-action="Edit" enctype="multipart/form-data" class="form-app-modern" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="CreatedDate" />
                         <input type="hidden" asp-for="CreatedBy" />
                         <input type="hidden" asp-for="ViewCount" />
-                        
-                        <div class="form-group">
-                            <label asp-for="Title" class="control-label">Başlık</label>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-medium">Başlık</label>
                             <input asp-for="Title" class="form-control" placeholder="Duyuru başlığını girin" />
-                            <span asp-validation-for="Title" class="text-danger"></span>
+                            <span asp-validation-for="Title" class="field-error small"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="Summary" class="control-label">Özet</label>
+                        <div class="mb-3">
+                            <label asp-for="Summary" class="form-label fw-medium">Özet</label>
                             <textarea asp-for="Summary" class="form-control" rows="3" placeholder="Kısa özet yazın"></textarea>
-                            <span asp-validation-for="Summary" class="text-danger"></span>
+                            <span asp-validation-for="Summary" class="field-error small"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="Content" class="control-label">İçerik</label>
-                            <textarea asp-for="Content" class="form-control tinymce-editor" rows="10" placeholder="Duyuru içeriğini yazın"></textarea>
-                            <span asp-validation-for="Content" class="text-danger"></span>
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label fw-medium">İçerik</label>
+                            <textarea asp-for="Content" class="form-control rich-text-editor" rows="10" placeholder="Duyuru içeriğini yazın"></textarea>
+                            <span asp-validation-for="Content" class="field-error small"></span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="imageFile" class="control-label">Resim</label>
-                            @if (!string.IsNullOrEmpty(Model.ImagePath))
-                            {
-                                <div class="mb-2">
-                                    <img src="@Model.ImagePath" alt="Mevcut resim" class="img-thumbnail" style="max-width: 200px;" />
-                                    <p class="small text-muted">Mevcut resim</p>
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label fw-medium">Resim</label>
+                            @if (!string.IsNullOrEmpty(Model.ImagePath)){
+                                <div class="mb-2 d-flex align-items-center gap-3 flex-wrap">
+                                    <img src="@Model.ImagePath" alt="Mevcut resim" class="rounded" style="max-width:180px; box-shadow:var(--shadow-sm);" />
+                                    <div class="small u-muted">Mevcut resim korunacak (yeni seçmezseniz).</div>
                                 </div>
                             }
                             <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
-                            <small class="form-text text-muted">Yeni resim seçmezseniz mevcut resim korunacak.</small>
                             <input type="hidden" asp-for="ImagePath" />
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="Tags" class="control-label">Etiketler</label>
+                        <div class="mb-3">
+                            <label asp-for="Tags" class="form-label fw-medium">Etiketler</label>
                             <input asp-for="Tags" class="form-control" placeholder="Virgülle ayırarak etiketler girin" />
-                            <span asp-validation-for="Tags" class="text-danger"></span>
-                            <small class="form-text text-muted">Örnek: teknoloji, haberler, duyuru</small>
+                            <span asp-validation-for="Tags" class="field-error small"></span>
+                            <div class="form-text">Örnek: teknoloji, haberler, duyuru</div>
                         </div>
 
-                        <div class="form-group">
-                            <label asp-for="PublishDate" class="control-label">Yayın Tarihi</label>
-                            <input asp-for="PublishDate" class="form-control" type="datetime-local" 
-                                   value="@(Model.PublishDate?.ToString("yyyy-MM-ddTHH:mm") ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" />
-                            <span asp-validation-for="PublishDate" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input asp-for="IsPinned" class="form-check-input" type="checkbox" />
-                                <label asp-for="IsPinned" class="form-check-label">
-                                    Sabitlenmiş Duyuru
-                                </label>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="PublishDate" class="form-label fw-medium">Yayın Tarihi</label>
+                                <input asp-for="PublishDate" class="form-control" type="datetime-local" value="@(Model.PublishDate?.ToString("yyyy-MM-ddTHH:mm") ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" />
+                                <span asp-validation-for="PublishDate" class="field-error small"></span>
                             </div>
-                            <small class="form-text text-muted">Sabitlenmiş duyurular en üstte görünür.</small>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
-                                <label asp-for="IsActive" class="form-check-label">
-                                    Aktif
-                                </label>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input asp-for="IsPinned" class="form-check-input" type="checkbox" />
+                                    <label asp-for="IsPinned" class="form-check-label small">Sabitlenmiş</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                    <label asp-for="IsActive" class="form-check-label small">Aktif</label>
+                                </div>
                             </div>
                         </div>
+                        <div class="form-text mt-1 mb-3">Sabitlenmiş duyurular listede en üstte görünür.</div>
 
-                        <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Güncelle
-                            </button>
-                            <a href="@Url.Action("Index")" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> İptal
-                            </a>
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn-app"><i class="fas fa-save"></i> Güncelle</button>
+                            <a href="@Url.Action("Index")" class="btn-app btn-app-outline"><i class="fas fa-times"></i> İptal</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-info">Duyuru İstatistikleri</h6>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-calendar text-primary"></i> <strong>Oluşturma:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</li>
-                        <li><i class="fas fa-user text-primary"></i> <strong>Oluşturan:</strong> @Model.CreatedBy</li>
-                        <li><i class="fas fa-eye text-primary"></i> <strong>Görüntülenme:</strong> @Model.ViewCount</li>
-                        @if (Model.UpdatedDate.HasValue)
-                        {
-                            <li><i class="fas fa-edit text-primary"></i> <strong>Son Güncelleme:</strong> @Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm")</li>
-                        }
+        <div class="col-lg-4 d-flex flex-column gap-4">
+            <div class="card-app p-0">
+                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">İstatistikler</h2></div>
+                <div class="p-4 small u-muted">
+                    <ul class="list-unstyled mb-0 d-grid gap-2">
+                        <li><i class="fas fa-calendar text-primary me-1"></i><strong> Oluşturma:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</li>
+                        <li><i class="fas fa-user text-primary me-1"></i><strong> Oluşturan:</strong> @Model.CreatedBy</li>
+                        <li><i class="fas fa-eye text-primary me-1"></i><strong> Görüntülenme:</strong> @Model.ViewCount</li>
+                        @if (Model.UpdatedDate.HasValue){<li><i class="fas fa-edit text-primary me-1"></i><strong> Son Güncelleme:</strong> @Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm")</li>}
                     </ul>
                 </div>
             </div>
-
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-info">Yardım</h6>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-info-circle text-primary"></i> <strong>Başlık:</strong> Duyurunun ana başlığı</li>
-                        <li><i class="fas fa-info-circle text-primary"></i> <strong>Özet:</strong> Kısa açıklama metni</li>
-                        <li><i class="fas fa-info-circle text-primary"></i> <strong>İçerik:</strong> Detaylı duyuru metni</li>
-                        <li><i class="fas fa-info-circle text-primary"></i> <strong>Etiketler:</strong> Arama için anahtar kelimeler</li>
-                        <li><i class="fas fa-info-circle text-primary"></i> <strong>Sabitlenmiş:</strong> Önemli duyurular için kullanın</li>
+            <div class="card-app p-0">
+                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Yardım</h2></div>
+                <div class="p-4 small u-muted">
+                    <ul class="list-unstyled mb-0 d-grid gap-2">
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Başlık:</strong> Duyurunun ana başlığı</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Özet:</strong> Kısa açıklama metni</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> İçerik:</strong> Detaylı duyuru metni</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Etiketler:</strong> Arama için anahtar kelimeler</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sabitlenmiş:</strong> Önemli duyurular için kullanın</li>
                     </ul>
                 </div>
             </div>
@@ -143,20 +120,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
-            selector: '.tinymce-editor',
-            height: 300,
+            selector: '.rich-text-editor',
+            height: 320,
             menubar: false,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount'
-            ],
-            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            plugins: 'advlist autolink lists link image charmap code table',
+            toolbar: 'undo redo | styles | bold italic | bullist numlist | link image | code',
+            language: 'tr',
+            content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px; }'
         });
     </script>
 }
