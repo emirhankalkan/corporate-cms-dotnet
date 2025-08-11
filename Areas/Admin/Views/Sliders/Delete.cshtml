@@ -5,97 +5,50 @@
 }
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-danger">
-                <div class="card-header bg-danger text-white">
-                    <h3 class="card-title">
-                        <i class="fas fa-trash me-2"></i>
-                        Slider Sil
-                    </h3>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+        <h1 class="h3 fw-semibold m-0">Slider Sil</h1>
+        <a asp-action="Index" class="btn-app btn-app-outline btn-sm"><i class="fas fa-arrow-left"></i> Geri Dön</a>
+    </div>
+    <div class="card-app p-0 overflow-hidden">
+        <div class="px-4 py-3 border-bottom d-flex align-items-center gap-2" style="background:var(--color-danger-soft); color:var(--color-danger-contrast);">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Silme Onayı</h2>
+        </div>
+        <div class="p-4">
+            <div class="p-3 rounded border mb-4" style="background:var(--color-surface-alt); border-color:var(--color-border);">
+                <p class="m-0 small"><strong>Dikkat:</strong> Bu slider'ı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+                <p class="m-0 small mt-2">Silinecek slider: <strong>@Model.Title</strong></p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <dl class="row small mb-0">
+                        <dt class="col-4">Başlık</dt><dd class="col-8">@Model.Title</dd>
+                        <dt class="col-4">Açıklama</dt><dd class="col-8">@(!string.IsNullOrEmpty(Model.Description) ? Model.Description : "<span class=\"u-muted\">Belirtilmemiş</span>")</dd>
+                        <dt class="col-4">Sıra</dt><dd class="col-8">@Model.Order</dd>
+                        <dt class="col-4">Durum</dt><dd class="col-8">@if(Model.IsActive){<span class="badge-app badge-soft" style="background:var(--color-success-soft); color:var(--color-success-contrast);">Aktif</span>} else {<span class="badge-app badge-outline">Pasif</span>}</dd>
+                        <dt class="col-4">Oluşturulma</dt><dd class="col-8">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                    </dl>
                 </div>
-                
-                <div class="card-body">
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Bu slider'ı silmek istediğinizden emin misiniz?
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-8">
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th width="20%">Başlık:</th>
-                                    <td>@Model.Title</td>
-                                </tr>
-                                <tr>
-                                    <th>Açıklama:</th>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(Model.Description))
-                                        {
-                                            @Model.Description
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">Belirtilmemiş</span>
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Sıra No:</th>
-                                    <td>@Model.Order</td>
-                                </tr>
-                                <tr>
-                                    <th>Durum:</th>
-                                    <td>
-                                        @if (Model.IsActive)
-                                        {
-                                            <span class="badge bg-success">Aktif</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">Pasif</span>
-                                        }
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Oluşturulma:</th>
-                                    <td>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
-                                </tr>
-                            </table>
+                <div class="col-md-4">
+                    <div class="small fw-semibold mb-2">Resim</div>
+                    @if (!string.IsNullOrEmpty(Model.ImagePath)){
+                        <div class="ratio ratio-16x9" style="--bs-aspect-ratio:60%; background:var(--color-surface-alt); border:1px solid var(--color-border); border-radius:var(--color-radius-md);">
+                            <img src="@Model.ImagePath" alt="@Model.Title" style="object-fit:cover; width:100%; height:100%; border-radius:var(--color-radius-md);" />
                         </div>
-                        
-                        <div class="col-md-4">
-                            @if (!string.IsNullOrEmpty(Model.ImagePath))
-                            {
-                                <div class="text-center">
-                                    <img src="@Model.ImagePath" alt="@Model.Title" class="img-fluid img-thumbnail">
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-info text-center">
-                                    <i class="fas fa-image fa-2x"></i>
-                                    <p class="mb-0 mt-2">Resim yok</p>
-                                </div>
-                            }
+                    } else {
+                        <div class="p-4 text-center border rounded" style="border-color:var(--color-border); background:var(--color-surface-alt);">
+                            <i class="fas fa-image fa-2x text-muted"></i>
+                            <p class="small u-muted mb-0 mt-2">Resim yok</p>
                         </div>
-                    </div>
+                    }
                 </div>
-                
-                <div class="card-footer">
-                    <form asp-action="Delete" method="post" style="display: inline;">
-                        <input type="hidden" asp-for="Id" />
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu slider\'ı silmek istediğinizden emin misiniz?')">
-                            <i class="fas fa-trash me-1"></i>
-                            Evet, Sil
-                        </button>
-                    </form>
-                    <a asp-action="Index" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>
-                        İptal
-                    </a>
-                </div>
+            </div>
+            <div class="d-flex justify-content-center gap-2 mt-4">
+                <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Silme işlemini onaylıyor musunuz?');">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn-app btn-app-danger"><i class="fas fa-trash"></i> Evet, Sil</button>
+                </form>
+                <a asp-action="Index" class="btn-app btn-app-outline"><i class="fas fa-times"></i> İptal</a>
             </div>
         </div>
     </div>
