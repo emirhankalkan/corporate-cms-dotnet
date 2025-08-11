@@ -1,71 +1,51 @@
-﻿// Site JS - Basitleştirilmiş Sürüm
+﻿// Public Site JS - Modernized
+// Handles: navbar scroll state, mobile dropdown toggle, form validation, password min-length helper.
 
-// DOM yüklendikten sonra çalışan kodlar
-document.addEventListener('DOMContentLoaded', function() {
-    // Navbar scroll effect
-    const navbar = document.querySelector('.navbar-modern');
+(function() {
+    'use strict';
 
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Navbar (new class .navbar-app)
+        const nav = document.querySelector('.navbar-app');
 
-    // Debug logları kaldırıldı
+        function applyNavScroll() { if (!nav) return; if (window.scrollY > 10) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); } }
+        applyNavScroll();
+        window.addEventListener('scroll', applyNavScroll, { passive: true });
 
-    // Event listener hatalarını düzelt
-    const menuToggle = document.getElementById('sidebarToggle');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.body.classList.toggle('sidebar-toggled');
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('toggled');
-            }
-        });
-    }
-
-    // Dropdown menu düzeltmesi
-    const dropdowns = document.querySelectorAll('.dropdown-toggle');
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', function(e) {
-            if (window.innerWidth < 768) {
-                e.preventDefault();
-                const submenu = this.nextElementSibling;
-                if (submenu) {
-                    submenu.classList.toggle('show');
+        // Mobile dropdown (improved for small screens)
+        document.querySelectorAll('.dropdown-toggle').forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                if (window.innerWidth < 992) { // below lg
+                    const submenu = this.nextElementSibling;
+                    if (submenu && submenu.classList.contains('dropdown-menu')) {
+                        e.preventDefault();
+                        submenu.classList.toggle('show');
+                    }
                 }
-            }
+            });
+        });
+
+        // Simple form validation enhancement
+        document.querySelectorAll('form.needs-validation').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        });
+
+        // Password min length guidance (keep lightweight; strength handled elsewhere when needed)
+        document.querySelectorAll('input[type="password"][data-minlength]').forEach(input => {
+            const min = parseInt(input.getAttribute('data-minlength'), 10) || 8;
+            input.addEventListener('input', function() {
+                if (this.value.length && this.value.length < min) {
+                    this.setCustomValidity(`En az ${min} karakter olmalı`);
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
         });
     });
-
-    // Form doğrulama iyileştirmeleri
-    const forms = document.querySelectorAll('.needs-validation');
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-    });
-
-    // Şifre doğrulama
-    const passwordInputs = document.querySelectorAll('input[type="password"]');
-    passwordInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            const minLength = 8;
-            if (this.value.length < minLength) {
-                this.setCustomValidity(`Şifre en az ${minLength} karakter olmalıdır`);
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-    });
-});
+})();
