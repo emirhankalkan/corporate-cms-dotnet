@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using CorporateCMS.Data;
+using CorporateCMS.Models; // added
+using CorporateCMS.Middleware; // added
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +23,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Configure Identity with Roles support
-builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+// Configure Identity with Roles support (switch to ApplicationUser)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
 {
     options.SignIn.RequireConfirmedAccount = false; // Development için false
     options.Password.RequireDigit = true;
@@ -58,6 +60,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Authorization policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ManageContent", policy => policy.RequireRole("SuperAdmin", "Admin", "Editor"));
+    options.AddPolicy("ViewAdmin", policy => policy.RequireRole("SuperAdmin", "Admin"));
+});
+
 var app = builder.Build();
 
 // Initialize database and roles
@@ -84,6 +93,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseGlobalExceptionHandler();
 
 app.UseAuthentication(); // Authentication middleware
 app.UseAuthorization();  // Authorization middleware
@@ -129,11 +140,11 @@ async Task InitializeDatabase(WebApplication app)
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         
-        // Ensure database is created
-        await context.Database.EnsureCreatedAsync();
+        // Apply pending migrations (replaces EnsureCreated)
+        await context.Database.MigrateAsync();
         
         // Create roles
         string[] roles = { "SuperAdmin", "Admin", "Editor", "Viewer" };
@@ -150,11 +161,13 @@ async Task InitializeDatabase(WebApplication app)
         var adminEmail = "admin@kurumsalcms.com";
         if (await userManager.FindByEmailAsync(adminEmail) == null)
         {
-            var adminUser = new IdentityUser
+            var adminUser = new ApplicationUser
             {
                 UserName = adminEmail,
                 Email = adminEmail,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                DisplayName = "Admin",
+                LastLoginAt = DateTime.UtcNow
             };
             
             var result = await userManager.CreateAsync(adminUser, "Admin123!");

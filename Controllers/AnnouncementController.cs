@@ -31,18 +31,26 @@ public class AnnouncementController : Controller
         return View(announcements);
     }
 
-    // GET: /Announcement/Details/5
-    public async Task<IActionResult> Details(int id)
+    // GET: /Announcement/Details/5 or /Announcement/slug
+    [Route("Announcement/Details/{id:int}")]
+    [Route("Announcement/{slug}")]
+    public async Task<IActionResult> Details(int? id, string? slug)
     {
-        var announcement = await _context.Announcements
-            .FirstOrDefaultAsync(a => a.Id == id && a.IsActive);
+        Models.Announcement? announcement = null;
+        if (id.HasValue)
+        {
+            announcement = await _context.Announcements.FirstOrDefaultAsync(a => a.Id == id.Value && a.IsActive);
+        }
+        else if (!string.IsNullOrWhiteSpace(slug))
+        {
+            announcement = await _context.Announcements.FirstOrDefaultAsync(a => a.Slug == slug && a.IsActive);
+        }
 
         if (announcement == null)
         {
             return NotFound();
         }
 
-        // Görüntülenme sayısını artır
         announcement.ViewCount++;
         _context.Update(announcement);
         await _context.SaveChangesAsync();

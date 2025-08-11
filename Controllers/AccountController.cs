@@ -10,13 +10,13 @@ namespace CorporateCMS.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
 
         public AccountController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
@@ -45,14 +45,16 @@ namespace CorporateCMS.Controllers
                 {
                     _logger.LogInformation("User logged in.");
                     
-                    // Kullanıcı bilgilerini al ve rolü kontrol et
+                    // Kullanıcıyı al ve LastLoginAt güncelle
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
+                        user.LastLoginAt = DateTime.UtcNow;
+                        await _userManager.UpdateAsync(user);
+                        
                         var isAdmin = await _userManager.IsInRoleAsync(user, "Admin") || 
                                      await _userManager.IsInRoleAsync(user, "SuperAdmin");
-                                     
-                        // Admin/SuperAdmin ise admin paneline, değilse kullanıcı paneline veya ana sayfaya yönlendir
+                        
                         if (isAdmin)
                         {
                             return LocalRedirect(returnUrl ?? "/Admin/Admin");
@@ -90,7 +92,15 @@ namespace CorporateCMS.Controllers
             
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                // Email'in @ öncesini DisplayName olarak kullan
+                var displayName = model.Email.Contains('@') ? model.Email.Split('@')[0] : model.Email;
+                var user = new ApplicationUser 
+                { 
+                    UserName = model.Email, 
+                    Email = model.Email,
+                    DisplayName = displayName,
+                    LastLoginAt = DateTime.UtcNow
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 
                 if (result.Succeeded)
@@ -98,7 +108,7 @@ namespace CorporateCMS.Controllers
                     _logger.LogInformation("User created a new account with password.");
                     
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl ?? "/");
+                    return LocalRedirect(returnUrl ?? "/User/Dashboard");
                 }
                 
                 foreach (var error in result.Errors)
@@ -159,10 +169,12 @@ namespace CorporateCMS.Controllers
                 var user = !string.IsNullOrEmpty(email) ? await _userManager.FindByEmailAsync(email) : null;
                 if (user != null)
                 {
+                    user.LastLoginAt = DateTime.UtcNow;
+                    await _userManager.UpdateAsync(user);
+                    
                     var isAdmin = await _userManager.IsInRoleAsync(user, "Admin") || 
                                  await _userManager.IsInRoleAsync(user, "SuperAdmin");
-                                 
-                    // Admin/SuperAdmin ise admin paneline, değilse kullanıcı paneline veya ana sayfaya yönlendir
+                    
                     if (isAdmin)
                     {
                         return LocalRedirect("/Admin/Admin");
@@ -191,11 +203,14 @@ namespace CorporateCMS.Controllers
                     var user = await _userManager.FindByEmailAsync(email);
                     if (user == null)
                     {
-                        user = new IdentityUser
+                        var displayName = email.Contains('@') ? email.Split('@')[0] : email;
+                        user = new ApplicationUser
                         {
                             UserName = email,
                             Email = email,
-                            EmailConfirmed = true // Since we got this from external provider, we can trust it's confirmed
+                            EmailConfirmed = true,
+                            DisplayName = displayName,
+                            LastLoginAt = DateTime.UtcNow
                         };
                         
                         var createResult = await _userManager.CreateAsync(user);

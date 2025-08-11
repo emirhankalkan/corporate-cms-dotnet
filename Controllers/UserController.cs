@@ -12,13 +12,13 @@ namespace CorporateCMS.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
         public UserController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -41,7 +41,9 @@ namespace CorporateCMS.Controllers
             {
                 Email = user.Email ?? string.Empty,
                 UserName = user.UserName ?? string.Empty,
-                Roles = roles
+                Roles = roles,
+                DisplayName = user.DisplayName ?? (user.Email?.Split('@')[0] ?? string.Empty),
+                LastLoginAt = user.LastLoginAt
             };
             
             return View(model);
@@ -59,7 +61,10 @@ namespace CorporateCMS.Controllers
             var model = new UserProfileViewModel
             {
                 Email = user.Email ?? string.Empty,
-                UserName = user.UserName ?? string.Empty
+                UserName = user.UserName ?? string.Empty,
+                DisplayName = user.DisplayName ?? string.Empty,
+                Bio = user.Bio ?? string.Empty,
+                AvatarUrl = user.AvatarUrl ?? string.Empty
             };
             
             return View(model);
@@ -94,6 +99,11 @@ namespace CorporateCMS.Controllers
                 }
             }
 
+            // DisplayName, Bio, AvatarUrl güncelle
+            user.DisplayName = string.IsNullOrWhiteSpace(model.DisplayName) ? null : model.DisplayName.Trim();
+            user.Bio = string.IsNullOrWhiteSpace(model.Bio) ? null : model.Bio.Trim();
+            user.AvatarUrl = string.IsNullOrWhiteSpace(model.AvatarUrl) ? null : model.AvatarUrl.Trim();
+
             // Şifre değiştirme isteği varsa güncelle
             if (!string.IsNullOrEmpty(model.CurrentPassword) && !string.IsNullOrEmpty(model.NewPassword))
             {
@@ -108,6 +118,7 @@ namespace CorporateCMS.Controllers
                 }
             }
 
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             TempData["StatusMessage"] = "Profiliniz başarıyla güncellendi";
             

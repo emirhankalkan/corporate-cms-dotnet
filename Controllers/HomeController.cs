@@ -34,18 +34,22 @@ public class HomeController : Controller
             .OrderBy(s => s.Order)
             .ToListAsync();
 
-        ViewBag.RecentPages = await _context.Pages
+        var recentPagesQuery = _context.Pages
             .Where(p => p.IsActive && !p.IsHomePage)
-            .OrderByDescending(p => p.CreatedDate)
-            .Take(6)
-            .ToListAsync();
+            .OrderByDescending(p => p.CreatedDate);
+        ViewBag.RecentPages = await recentPagesQuery.Take(6).ToListAsync();
 
-        ViewBag.Announcements = await _context.Announcements
+        var announcementsQuery = _context.Announcements
             .Where(a => a.IsActive)
             .OrderByDescending(a => a.IsPinned)
-            .ThenByDescending(a => a.CreatedDate)
-            .Take(5)
-            .ToListAsync();
+            .ThenByDescending(a => a.CreatedDate);
+        ViewBag.Announcements = await announcementsQuery.Take(5).ToListAsync();
+
+        // Yeni: sayaç verileri (istatistik alanı için)
+        ViewBag.PageCount = await recentPagesQuery.CountAsync();
+        ViewBag.AnnouncementCount = await announcementsQuery.CountAsync();
+        ViewBag.ActiveSliderCount = await _context.Sliders.CountAsync(s => s.IsActive);
+        ViewBag.UserCount = await _context.Set<ApplicationUser>().CountAsync();
 
         return View();
     }

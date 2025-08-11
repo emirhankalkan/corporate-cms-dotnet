@@ -6,7 +6,7 @@ using CorporateCMS.Models;
 namespace CorporateCMS.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "SuperAdmin,Admin")]
+[Authorize(Policy = "ViewAdmin")]
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;

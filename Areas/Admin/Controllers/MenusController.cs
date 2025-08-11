@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CorporateCMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Policy = "ManageContent")]
     public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -12,7 +12,7 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card-app p-0 overflow-hidden">
+            <div class="card-app p-0 overflow-hidden mb-4">
                 <div class="border-bottom px-4 py-3 d-flex align-items-center justify-content-between" style="background:var(--color-surface-alt);">
                     <h2 class="h6 fw-semibold m-0 text-uppercase tracking-wide" style="letter-spacing:.5px;">Duyuru Bilgileri</h2>
                 </div>
@@ -25,6 +25,11 @@
                             <input asp-for="Title" class="form-control" placeholder="Duyuru başlığını girin" />
                             <span asp-validation-for="Title" class="field-error small"></span>
                         </div>
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label fw-medium">Slug (URL)</label>
+                            <input asp-for="Slug" class="form-control" placeholder="Boş bırakılırsa otomatik" />
+                            <span asp-validation-for="Slug" class="field-error small"></span>
+                        </div>
 
                         <div class="mb-3">
                             <label asp-for="Summary" class="form-label fw-medium">Özet</label>
@@ -36,12 +41,17 @@
                             <label asp-for="Content" class="form-label fw-medium">İçerik</label>
                             <textarea asp-for="Content" class="form-control rich-text-editor" rows="10" placeholder="Duyuru içeriğini yazın"></textarea>
                             <span asp-validation-for="Content" class="field-error small"></span>
+                            <div class="form-text">HTML içerik güvenlik için temizlenir.</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="imageFile" class="form-label fw-medium">Resim</label>
-                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
-                            <div class="form-text">JPG, PNG, GIF formatlarında resim yükleyebilirsiniz.</div>
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp" />
+                            <div class="form-text">İzin verilen: JPG, PNG, GIF, WEBP • Maks 2MB</div>
+                            @if (ViewData.ModelState.ContainsKey("ImageFile"))
+                            {
+                                <span class="field-error small">@ViewData.ModelState["ImageFile"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                            }
                         </div>
 
                         <div class="mb-3">
@@ -54,7 +64,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label asp-for="PublishDate" class="form-label fw-medium">Yayın Tarihi</label>
-                                <input asp-for="PublishDate" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                                <input asp-for="PublishDate" class="form-control" type="datetime-local" value="@(Model.PublishDate?.ToString("yyyy-MM-ddTHH:mm") ?? DateTime.Now.ToString("yyyy-MM-ddTHH:mm"))" />
                                 <span asp-validation-for="PublishDate" class="field-error small"></span>
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
@@ -65,7 +75,7 @@
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
                                 <div class="form-check">
-                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" checked />
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" />
                                     <label asp-for="IsActive" class="form-check-label small">Aktif</label>
                                 </div>
                             </div>
@@ -80,19 +90,17 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4">
+        <div class="col-lg-4 d-flex flex-column gap-4">
             <div class="card-app p-0">
-                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);">
-                    <h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Yardım</h2>
-                </div>
+                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Yardım</h2></div>
                 <div class="p-4 small u-muted">
                     <ul class="list-unstyled mb-0 d-grid gap-2">
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Başlık:</strong> Duyurunun ana başlığı</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Slug:</strong> URL parçası, otomatik üretilebilir</li>
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Özet:</strong> Kısa açıklama metni</li>
-                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> İçerik:</strong> Detaylı duyuru metni</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> İçerik:</strong> Detaylı duyuru metni (temizlenir)</li>
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Etiketler:</strong> Arama için anahtar kelimeler</li>
-                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sabitlenmiş:</strong> Önemli duyurular için kullanın</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sabitlenmiş:</strong> Önemli duyuru üstte çıkar</li>
                     </ul>
                 </div>
             </div>

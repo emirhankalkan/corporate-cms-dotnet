@@ -8,16 +8,6 @@
     <RootNamespace>CorporateCMS</RootNamespace>
   </PropertyGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="!Exists('$(ProjectDir)google-auth-setup.done')">
-    <Message Importance="High" Text="Google Authentication Setup: Please configure Google Authentication in appsettings.json" />
-    <Message Importance="High" Text="For instructions, see docs/google-auth-setup.md" />
-    <Touch Files="$(ProjectDir)google-auth-setup.done" AlwaysCreate="true" />
-  </Target>
-
-  <ItemGroup>
-    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.4" />

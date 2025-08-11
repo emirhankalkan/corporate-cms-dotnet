@@ -1,123 +1,109 @@
 @model CorporateCMS.ViewModels.UserProfileViewModel
 @{
     ViewData["Title"] = "Profil Ayarları";
+    var displayName = !string.IsNullOrWhiteSpace(Model.DisplayName) ? Model.DisplayName : Model.UserName;
+    string initial = (displayName ?? "?").Trim().Substring(0,1).ToUpper();
 }
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-3 user-panel">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-circle me-2"></i>
-                        Kullanıcı Menüsü
-                    </h5>
+<div class="container py-5 user-dashboard">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <aside class="dash-sidebar card-simple p-3 h-100">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="user-avatar-lg gradient-ring"><span>@initial</span></div>
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold mb-1 text-truncate" title="@displayName">@displayName</div>
+                        <div class="small text-muted text-truncate" title="@Model.Email">@Model.Email</div>
+                    </div>
                 </div>
-                <div class="list-group list-group-flush">
-                    <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                        <i class="fas fa-tachometer-alt me-2"></i>
-                        Kontrol Paneli
-                    </a>
-                    <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-user-edit me-2"></i>
-                        Profil Ayarları
-                    </a>
-                    <a href="javascript:document.getElementById('logoutForm').submit();" class="list-group-item list-group-item-action text-danger">
-                        <i class="fas fa-sign-out-alt me-2"></i>
-                        Çıkış Yap
-                    </a>
-                    <form id="logoutForm" class="d-none" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button type="submit">Çıkış Yap</button>
-                    </form>
-                </div>
-            </div>
+                <nav>
+                    <ul class="nav-vertical mb-4">
+                        <li><a asp-controller="User" asp-action="Dashboard"><i class="fas fa-gauge"></i> Kontrol Paneli</a></li>
+                        <li><a class="active" asp-controller="User" asp-action="Profile"><i class="fas fa-user-pen"></i> Profil Ayarları</a></li>
+                        <li>
+                            <a href="javascript:document.getElementById('logoutForm').submit();" class="text-danger"><i class="fas fa-right-from-bracket"></i> Çıkış Yap</a>
+                            <form id="logoutForm" class="d-none" asp-area="" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"></form>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="small text-muted">İpucu: Görünen isim ve avatar URL site genelinde gösterilir.</div>
+            </aside>
         </div>
-        
-        <div class="col-lg-9 user-panel">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-edit me-2 text-primary"></i>
-                        Profil Ayarları
-                    </h5>
+        <div class="col-lg-9">
+            <div class="card-simple p-4 position-relative overflow-hidden">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-3 mb-3">
+                    <h1 class="h5 fw-bold m-0 d-flex align-items-center gap-2"><i class="fas fa-user-gear text-primary"></i> Profil Ayarları</h1>
+                    <a asp-controller="User" asp-action="Dashboard" class="btn-simple btn-outline-simple btn-sm"><i class="fas fa-arrow-left me-1"></i> Panele Dön</a>
                 </div>
-                <div class="card-body">
-                    @if (TempData["StatusMessage"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            @TempData["StatusMessage"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @if (TempData["StatusMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show small" role="alert">
+                        <i class="fas fa-check-circle me-1"></i>@TempData["StatusMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <form asp-controller="User" asp-action="UpdateProfile" method="post" class="form-stacked mt-2">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+                    <div class="section-block">
+                        <h6 class="section-title mb-2"><i class="fas fa-id-card-clip me-2 text-primary"></i>Hesap Bilgileri</h6>
+                        <div class="u-divider mb-3"></div>
+                        <div class="field-block">
+                            <label asp-for="UserName" class="field-label"></label>
+                            <input asp-for="UserName" class="field-input" readonly />
+                            <div class="field-hint">Kullanıcı adı değiştirilemez.</div>
                         </div>
-                    }
-                    
-                    <form asp-controller="User" asp-action="UpdateProfile" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="UserName" class="form-label"></label>
-                                    <input asp-for="UserName" class="form-control" readonly />
-                                    <small class="form-text text-muted">Kullanıcı adınız değiştirilemez.</small>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="Email" class="form-label"></label>
-                                    <input asp-for="Email" class="form-control" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="field-block">
+                            <label asp-for="Email" class="field-label"></label>
+                            <input asp-for="Email" class="field-input" />
+                            <span asp-validation-for="Email" class="text-danger field-validation small"></span>
                         </div>
-                        
-                        <h5 class="mt-4 mb-3">Şifre Değiştir</h5>
-                        <hr>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="CurrentPassword" class="form-label"></label>
-                                    <input asp-for="CurrentPassword" class="form-control" />
-                                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="field-block">
+                            <label asp-for="DisplayName" class="field-label"></label>
+                            <input asp-for="DisplayName" class="field-input" placeholder="Görünen isim" />
+                            <span asp-validation-for="DisplayName" class="text-danger field-validation small"></span>
                         </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="NewPassword" class="form-label"></label>
-                                    <input asp-for="NewPassword" class="form-control" />
-                                    <span asp-validation-for="NewPassword" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label asp-for="ConfirmPassword" class="form-label"></label>
-                                    <input asp-for="ConfirmPassword" class="form-control" />
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                </div>
+                        <div class="field-block">
+                            <label asp-for="AvatarUrl" class="field-label"></label>
+                            <input asp-for="AvatarUrl" class="field-input" placeholder="https://..." />
+                            <span asp-validation-for="AvatarUrl" class="text-danger field-validation small"></span>
+                        </div>
+                        <div class="field-block">
+                            <label asp-for="Bio" class="field-label"></label>
+                            <textarea asp-for="Bio" class="field-input" rows="4" placeholder="Kısa biyografi..."></textarea>
+                            <span asp-validation-for="Bio" class="text-danger field-validation small"></span>
+                        </div>
+                    </div>
+                    <div class="section-block mt-4">
+                        <h6 class="section-title mb-2"><i class="fas fa-key me-2 text-primary"></i>Şifre Değiştir</h6>
+                        <div class="u-divider mb-3"></div>
+                        <div class="field-block inline-group">
+                            <div class="inline-pair">
+                                <label asp-for="CurrentPassword" class="field-label"></label>
+                                <input asp-for="CurrentPassword" class="field-input" />
+                                <span asp-validation-for="CurrentPassword" class="text-danger field-validation small"></span>
                             </div>
                         </div>
-                        
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a asp-controller="User" asp-action="Dashboard" class="btn btn-outline-secondary me-2">
-                                <i class="fas fa-arrow-left me-1"></i>
-                                Geri Dön
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>
-                                Değişiklikleri Kaydet
-                            </button>
+                        <div class="field-block multi-2">
+                            <div>
+                                <label asp-for="NewPassword" class="field-label"></label>
+                                <input asp-for="NewPassword" class="field-input" />
+                                <span asp-validation-for="NewPassword" class="text-danger field-validation small"></span>
+                            </div>
+                            <div>
+                                <label asp-for="ConfirmPassword" class="field-label"></label>
+                                <input asp-for="ConfirmPassword" class="field-input" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger field-validation small"></span>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-controller="User" asp-action="Dashboard" class="btn-simple"><i class="fas fa-circle-xmark me-1"></i> Vazgeç</a>
+                        <button type="submit" class="btn-simple btn-primary-simple"><i class="fas fa-floppy-disk me-1"></i> Kaydet</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

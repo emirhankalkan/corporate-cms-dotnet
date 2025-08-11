@@ -71,7 +71,6 @@ public class PageController : Controller
     }
 
     // GET: /{slug} or Page/Details/5
-    [Route("{slug}")]
     public async Task<IActionResult> Details(string? slug, int? id)
     {
         if (string.IsNullOrEmpty(slug) && !id.HasValue)

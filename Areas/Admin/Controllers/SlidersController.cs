@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 namespace CorporateCMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Policy = "ManageContent")]
     public class SlidersController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private static readonly string[] _allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+        private static readonly string[] _allowedContentTypes = new[] { "image/jpeg", "image/png", "image/gif", "image/webp" };
+        private const long _maxImageBytes = 2 * 1024 * 1024; // 2MB
 
         public SlidersController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
@@ -58,25 +61,21 @@ namespace CorporateCMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,ImagePath,Link,ButtonText,Order,OpenInNewTab,IsActive")] Slider slider, IFormFile? imageFile)
         {
+            if (imageFile != null)
+            {
+                var result = await ProcessAndSaveImageAsync(imageFile);
+                if (!result.Success)
+                {
+                    ModelState.AddModelError("ImageFile", result.ErrorMessage ?? "Geçersiz resim");
+                }
+                else
+                {
+                    slider.ImagePath = result.RelativePath ?? string.Empty;
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                // Handle image upload
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "sliders");
-                    Directory.CreateDirectory(uploadsFolder);
-                    
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await imageFile.CopyToAsync(fileStream);
-                    }
-                    
-                    slider.ImagePath = "/uploads/sliders/" + uniqueFileName;
-                }
-
                 slider.CreatedDate = DateTime.UtcNow;
                 slider.UpdatedDate = DateTime.UtcNow;
 
@@ -115,37 +114,30 @@ namespace CorporateCMS.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            string? oldImagePath = null;
+            if (imageFile != null)
+            {
+                oldImagePath = slider.ImagePath;
+                var result = await ProcessAndSaveImageAsync(imageFile);
+                if (!result.Success)
+                {
+                    ModelState.AddModelError("ImageFile", result.ErrorMessage ?? "Geçersiz resim");
+                }
+                else
+                {
+                    slider.ImagePath = result.RelativePath ?? string.Empty;
+                    if (!string.IsNullOrEmpty(oldImagePath))
+                    {
+                        var oldPhysical = Path.Combine(_webHostEnvironment.WebRootPath, oldImagePath.TrimStart('/'));
+                        if (System.IO.File.Exists(oldPhysical)) System.IO.File.Delete(oldPhysical);
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Handle image upload
-                    if (imageFile != null && imageFile.Length > 0)
-                    {
-                        // Delete old image if exists
-                        if (!string.IsNullOrEmpty(slider.ImagePath))
-                        {
-                            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, slider.ImagePath.TrimStart('/'));
-                            if (System.IO.File.Exists(oldImagePath))
-                            {
-                                System.IO.File.Delete(oldImagePath);
-                            }
-                        }
-
-                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "sliders");
-                        Directory.CreateDirectory(uploadsFolder);
-                        
-                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await imageFile.CopyToAsync(fileStream);
-                        }
-                        
-                        slider.ImagePath = "/uploads/sliders/" + uniqueFileName;
-                    }
-
                     slider.UpdatedDate = DateTime.UtcNow;
                     _context.Update(slider);
                     await _context.SaveChangesAsync();
@@ -195,7 +187,6 @@ namespace CorporateCMS.Areas.Admin.Controllers
             var slider = await _context.Sliders.FindAsync(id);
             if (slider != null)
             {
-                // Delete image file if exists
                 if (!string.IsNullOrEmpty(slider.ImagePath))
                 {
                     var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, slider.ImagePath.TrimStart('/'));
@@ -217,6 +208,26 @@ namespace CorporateCMS.Areas.Admin.Controllers
         private bool SliderExists(int id)
         {
             return _context.Sliders.Any(e => e.Id == id);
+        }
+
+        private async Task<(bool Success, string? RelativePath, string? ErrorMessage)> ProcessAndSaveImageAsync(IFormFile file)
+        {
+            if (file.Length == 0) return (false, null, "Boş dosya");
+            if (file.Length > _maxImageBytes) return (false, null, $"Resim boyutu 2MB'ı aşamaz (Mevcut: {file.Length / 1024} KB)");
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!_allowedExtensions.Contains(ext)) return (false, null, "İzin verilmeyen dosya uzantısı");
+            if (!_allowedContentTypes.Contains(file.ContentType)) return (false, null, "İzin verilmeyen içerik türü");
+
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "sliders");
+            Directory.CreateDirectory(uploadsFolder);
+            var safeFileName = Guid.NewGuid().ToString("N") + ext;
+            var filePath = Path.Combine(uploadsFolder, safeFileName);
+            using (var stream = new FileStream(filePath, FileMode.CreateNew))
+            {
+                await file.CopyToAsync(stream);
+            }
+            var relative = "/uploads/sliders/" + safeFileName;
+            return (true, relative, null);
         }
     }
 }

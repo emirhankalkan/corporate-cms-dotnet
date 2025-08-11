@@ -9,67 +9,96 @@
         <h1 class="h3 fw-semibold m-0">Slider Düzenle</h1>
         <a asp-action="Index" class="btn-app btn-app-outline btn-sm"><i class="fas fa-arrow-left"></i> Geri Dön</a>
     </div>
-    <div class="card-app p-0 overflow-hidden">
-        <div class="px-4 py-3 border-bottom" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Bilgiler</h2></div>
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="p-4 form-app-modern" novalidate>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImagePath" />
-            <input type="hidden" asp-for="CreatedDate" />
-            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label asp-for="Title" class="form-label fw-medium">Başlık *</label>
-                    <input asp-for="Title" class="form-control" placeholder="Slider başlığını girin" />
-                    <span asp-validation-for="Title" class="field-error small"></span>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-app p-0 overflow-hidden mb-4">
+                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);">
+                    <h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Slider Bilgileri</h2>
                 </div>
-                <div class="col-md-3">
-                    <label asp-for="Order" class="form-label fw-medium">Sıra No *</label>
-                    <input asp-for="Order" type="number" class="form-control" min="0" />
-                    <span asp-validation-for="Order" class="field-error small"></span>
-                </div>
-                <div class="col-md-3">
-                    <label asp-for="ButtonText" class="form-label fw-medium">Buton Metni</label>
-                    <input asp-for="ButtonText" class="form-control" placeholder="Detaylar..." />
-                    <span asp-validation-for="ButtonText" class="field-error small"></span>
-                </div>
-                <div class="col-12">
-                    <label asp-for="Description" class="form-label fw-medium">Açıklama</label>
-                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Slider açıklamasını girin"></textarea>
-                    <span asp-validation-for="Description" class="field-error small"></span>
-                </div>
-                <div class="col-md-6">
-                    <label for="imageFile" class="form-label fw-medium">Slider Resmi</label>
-                    <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
-                    <div class="form-text">Yeni resim seçilmezse mevcut resim korunur.</div>
-                    @if (!string.IsNullOrEmpty(Model.ImagePath)){
-                        <div class="mt-2" style="width:200px; height:120px; overflow:hidden; border-radius:var(--color-radius-md); background:var(--color-surface-alt); display:flex; align-items:center; justify-content:center;">
-                            <img src="@Model.ImagePath" alt="@Model.Title" style="width:100%; height:100%; object-fit:cover;" />
+                <div class="p-4">
+                    <form asp-action="Edit" enctype="multipart/form-data" class="form-app-modern" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedDate" />
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-medium">Başlık</label>
+                            <input asp-for="Title" class="form-control" placeholder="Slider başlığını girin" />
+                            <span asp-validation-for="Title" class="field-error small"></span>
                         </div>
-                    }
-                </div>
-                <div class="col-md-6">
-                    <label asp-for="Link" class="form-label fw-medium">Bağlantı</label>
-                    <input asp-for="Link" class="form-control" placeholder="https://example.com" />
-                    <span asp-validation-for="Link" class="field-error small"></span>
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <div class="form-check mt-3">
-                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
-                        <label asp-for="IsActive" class="form-check-label small">Aktif</label>
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex align-items-center">
-                    <div class="form-check mt-3">
-                        <input asp-for="OpenInNewTab" class="form-check-input" type="checkbox" />
-                        <label asp-for="OpenInNewTab" class="form-check-label small">Yeni sekmede aç</label>
-                    </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-medium">Açıklama</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Slider açıklamasını girin"></textarea>
+                            <span asp-validation-for="Description" class="field-error small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label fw-medium">Slider Resmi</label>
+                            @if (!string.IsNullOrEmpty(Model.ImagePath)){
+                                <div class="mb-2 d-flex align-items-center gap-3 flex-wrap">
+                                    <img src="@Model.ImagePath" alt="Mevcut resim" class="rounded" style="max-width:220px; box-shadow:var(--shadow-sm);" />
+                                    <div class="small u-muted">Mevcut resim korunacak (yeni seçmezseniz).</div>
+                                </div>
+                            }
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp" />
+                            <div class="form-text">İzin verilen: JPG, PNG, GIF, WEBP • Maks 2MB</div>
+                            @if (ViewData.ModelState.ContainsKey("ImageFile"))
+                            {
+                                <span class="field-error small">@ViewData.ModelState["ImageFile"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                            }
+                            <input type="hidden" asp-for="ImagePath" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Link" class="form-label fw-medium">Bağlantı (Opsiyonel)</label>
+                            <input asp-for="Link" class="form-control" placeholder="Tıklanınca gidilecek URL" />
+                            <span asp-validation-for="Link" class="field-error small"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label asp-for="Order" class="form-label fw-medium">Sıra</label>
+                                <input asp-for="Order" class="form-control" />
+                                <span asp-validation-for="Order" class="field-error small"></span>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input asp-for="OpenInNewTab" class="form-check-input" type="checkbox" />
+                                    <label asp-for="OpenInNewTab" class="form-check-label small">Yeni Sekme</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                    <label asp-for="IsActive" class="form-check-label small">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-text mt-1 mb-3">Sıra: Küçükten büyüğe doğru listelenir.</div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn-app"><i class="fas fa-save"></i> Güncelle</button>
+                            <a asp-action="Index" class="btn-app btn-app-outline"><i class="fas fa-times"></i> İptal</a>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn-app"><i class="fas fa-save"></i> Güncelle</button>
-                <a asp-action="Index" class="btn-app btn-app-outline"><i class="fas fa-times"></i> İptal</a>
+        </div>
+        <div class="col-lg-4 d-flex flex-column gap-4">
+            <div class="card-app p-0">
+                <div class="border-bottom px-4 py-3" style="background:var(--color-surface-alt);"><h2 class="h6 fw-semibold m-0 text-uppercase" style="letter-spacing:.5px;">Yardım</h2></div>
+                <div class="p-4 small u-muted">
+                    <ul class="list-unstyled mb-0 d-grid gap-2">
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Başlık:</strong> Slider ana başlığı</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Resim:</strong> Yüksek kalite optimize görsel</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Bağlantı:</strong> Tıklanınca gidilecek adres</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sıra:</strong> Listelenme önceliği</li>
+                    </ul>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

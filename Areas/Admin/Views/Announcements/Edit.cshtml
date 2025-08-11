@@ -29,6 +29,12 @@
                             <input asp-for="Title" class="form-control" placeholder="Duyuru başlığını girin" />
                             <span asp-validation-for="Title" class="field-error small"></span>
                         </div>
+                        <div class="mb-3">
+                            <label asp-for="Slug" class="form-label fw-medium">Slug (URL)</label>
+                            <input asp-for="Slug" class="form-control" placeholder="Otomatik oluşur, gerekirse düzenleyin" />
+                            <span asp-validation-for="Slug" class="field-error small"></span>
+                            <div class="form-text">Türkçe karakterler sadeleştirilir, benzersiz olmalı.</div>
+                        </div>
 
                         <div class="mb-3">
                             <label asp-for="Summary" class="form-label fw-medium">Özet</label>
@@ -40,6 +46,7 @@
                             <label asp-for="Content" class="form-label fw-medium">İçerik</label>
                             <textarea asp-for="Content" class="form-control rich-text-editor" rows="10" placeholder="Duyuru içeriğini yazın"></textarea>
                             <span asp-validation-for="Content" class="field-error small"></span>
+                            <div class="form-text">HTML içeriği güvenlik için temizlenir (script, iframe vb. çıkarılır).</div>
                         </div>
 
                         <div class="mb-3">
@@ -50,7 +57,12 @@
                                     <div class="small u-muted">Mevcut resim korunacak (yeni seçmezseniz).</div>
                                 </div>
                             }
-                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp" />
+                            <div class="form-text">İzin verilen: JPG, PNG, GIF, WEBP • Maks 2MB</div>
+                            @if (ViewData.ModelState.ContainsKey("ImageFile"))
+                            {
+                                <span class="field-error small">@ViewData.ModelState["ImageFile"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                            }
                             <input type="hidden" asp-for="ImagePath" />
                         </div>
 
@@ -107,10 +119,11 @@
                 <div class="p-4 small u-muted">
                     <ul class="list-unstyled mb-0 d-grid gap-2">
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Başlık:</strong> Duyurunun ana başlığı</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Slug:</strong> URL parçası, otomatik üretilir düzenlenebilir.</li>
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Özet:</strong> Kısa açıklama metni</li>
-                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> İçerik:</strong> Detaylı duyuru metni</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> İçerik:</strong> Detaylı duyuru metni (temizlenir)</li>
                         <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Etiketler:</strong> Arama için anahtar kelimeler</li>
-                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sabitlenmiş:</strong> Önemli duyurular için kullanın</li>
+                        <li><i class="fas fa-info-circle text-primary me-1"></i><strong> Sabitlenmiş:</strong> Önemli duyurular için</li>
                     </ul>
                 </div>
             </div>

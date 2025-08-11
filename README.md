@@ -2,6 +2,14 @@
 
 Modern ASP.NET MVC (.NET 9) tabanlı kurumsal içerik yönetim sistemi.
 
+## Güncel Öne Çıkanlar (Son Eklemeler)
+- Google OAuth entegrasyonu
+- Genişletilmiş kullanıcı profili (DisplayName, Bio, AvatarUrl, LastLoginAt)
+- Global Exception Middleware (tüm beklenmeyen hatalar loglanır / özel hata sayfası)
+- Güvenli resim yükleme: Uzantı + MIME + boyut (2MB) doğrulaması, rastgele dosya adı
+- Duyuru ve Sayfalarda SEO dostu Slug alanı (duyurulara eklendi, benzersiz index)
+- Basit pagination (duyurular Index action parametreleri ile hazır)
+
 ## Özellikler
 
 ### Temel Özellikler
@@ -13,28 +21,25 @@ Modern ASP.NET MVC (.NET 9) tabanlı kurumsal içerik yönetim sistemi.
 
 ### Teknik Özellikler
 - **ASP.NET MVC** (.NET 9) framework
-- **Entity Framework Core** ORM
-- **ASP.NET Identity** kimlik doğrulama
+- **Entity Framework Core** ORM + Migrations
+- **ASP.NET Identity** kimlik doğrulama (genişletilmiş ApplicationUser)
 - **SQLite** veritabanı (geliştirme için)
-- **Bootstrap 5** responsive tasarım
-- **TinyMCE** rich text editor
-- **Modern JavaScript** (ES6+)
+- Basitleştirilmiş mimari (ek servis katmanı kaldırıldı)
 
 ## Sistem Mimarisi
 
 ```
 CorporateCMS/
 ├── Areas/Admin/              # Admin paneli area
-│   ├── Controllers/         # Admin kontrolcüleri
-│   └── Views/              # Admin görünümleri
-├── Controllers/            # Genel kontrolcüler
-├── Data/                   # Entity Framework context
-├── Models/                 # Veri modelleri
-│   └── ViewModels/        # Görünüm modelleri
-├── Views/                 # Genel görünümler
-└── wwwroot/               # Statik dosyalar
-    ├── css/admin.css      # Admin panel stilleri
-    └── js/admin.js        # Admin panel JavaScript
+│   ├── Controllers/          # Admin kontrolcüleri
+│   └── Views/                # Admin görünümleri
+├── Controllers/              # Genel kontrolcüler
+├── Data/                     # Entity Framework context
+├── Models/                   # Veri modelleri
+│   └── ViewModels/           # Görünüm modelleri
+├── Middleware/               # Global hata yakalama vb.
+├── Views/                    # Genel görünümler
+└── wwwroot/                  # Statik dosyalar
 ```
   
 ## Kullanıcı Rolleri
@@ -44,7 +49,7 @@ CorporateCMS/
 | **SuperAdmin** | Sistem yöneticisi | Tüm yetkiler |
 | **Admin** | Site yöneticisi | Kullanıcı yönetimi hariç tüm yetkiler |
 | **Editor** | İçerik editörü | İçerik oluşturma/düzenleme |
-| **Viewer** | Görüntüleyici | Sadece okuma yetkisi |
+| **Viewer** | Görüntüleyici | Sadece okuma |
 
 ## Kurulum
 
@@ -58,7 +63,7 @@ CorporateCMS/
 1. **Projeyi klonlayın**
 ```bash
 git clone https://github.com/emirhankalkan/corporate-cms-dotnet.git
-cd CorporateCMS
+cd corporate-cms-dotnet
 ```
 
 2. **Bağımlılıkları yükleyin**
@@ -66,132 +71,75 @@ cd CorporateCMS
 dotnet restore
 ```
 
-3. **Veritabanını oluşturun**
+3. **Migration uygula**
 ```bash
 dotnet ef database update
 ```
 
-4. **Projeyi çalıştırın**
+4. **Çalıştır**
 ```bash
 dotnet run
 ```
 
 5. **Tarayıcıda açın**
 ```
-https://localhost:5001
+http://localhost:5084
+```
+
+## Google OAuth
+appsettings.json içine client id/secret yerine prod'da ortam değişkenleri veya User Secrets kullanın:
+```
+Authentication:Google:ClientId
+Authentication:Google:ClientSecret
+```
+
+User Secrets örnek (development):
+```bash
+dotnet user-secrets set "Authentication:Google:ClientId" "XXX"
+dotnet user-secrets set "Authentication:Google:ClientSecret" "YYY"
 ```
 
 ## Varsayılan Admin Kullanıcısı
-
-Sistem ilk çalıştığında otomatik olarak admin kullanıcısı oluşturulur:
-
 - **Email**: admin@kurumsalcms.com
 - **Şifre**: Admin123!
 - **Rol**: SuperAdmin
 
-## Admin Panel
+## Güvenli Resim Yükleme Kuralları
+- Uzantılar: .jpg .jpeg .png .gif .webp
+- MIME: image/jpeg, image/png, image/gif, image/webp
+- Maksimum: 2MB
+- Rastgele dosya adı GUID + uzantı
+- Başarılı güncellemede eski dosya silinir
 
-Admin paneline erişim için:
-```
-https://localhost:5001/Admin
-```
+## Slug Kuralları
+- Türkçe karakterler sadeleştirilir
+- Harf + rakam + tire
+- Ardışık tireler teklenir
+- Boşluk -> '-'
+- Benzersiz index (Announcement.Slug ve Page.Slug)
 
-### Ana Özellikler
-- Dashboard - Sistem istatistikleri
-- Sayfa Yönetimi - İçerik oluşturma/düzenleme
-- Menü Yönetimi - Site navigasyonu
-- Slider Yönetimi - Ana sayfa görselleri
-- Duyuru Yönetimi - Haberler ve duyurular
-
-## Geliştirme
-
-### Yeni Migration Oluşturma
+## Production İçin Yayınlama
 ```bash
-dotnet ef migrations add <MigrationName>
+dotnet publish -c Release -o publish
+```
+Reverse proxy (Nginx/IIS) arkasına koyun; ortam değişkenleri ile ConnectionStrings__DefaultConnection ve Google secret değerlerini verin.
+
+## Migration İş Akışı
+```bash
+dotnet ef migrations add AddAnnouncementSlug
+# Değişiklikleri inceleyin
 dotnet ef database update
 ```
 
-### Proje Derleme
-```bash
-dotnet build
-```
-
-### Testler Çalıştırma
-```bash
-dotnet test
-```
-
-## Kullanılan Teknolojiler
-
-- **Backend**: ASP.NET MVC (.NET 9), Entity Framework Core, ASP.NET Identity
-- **Frontend**: HTML5, CSS3, Bootstrap 5, JavaScript (ES6+)
-- **Veritabanı**: SQLite (geliştirme), SQL Server (production)
-- **Editor**: TinyMCE Rich Text Editor
-- **İkonlar**: Font Awesome 6
-
-## API Endpoints
-### Admin Area
-```
-GET  /Admin                    - Dashboard
-GET  /Admin/Pages              - Sayfa listesi
-POST /Admin/Pages/Create       - Yeni sayfa oluştur
-GET  /Admin/Pages/Edit/{id}    - Sayfa düzenle
-POST /Admin/Pages/Delete/{id}  - Sayfa sil
-```
-
-### Public Area
-```
-GET  /                         - Ana sayfa
-GET  /{slug}                   - Dinamik sayfa görüntüleme
-```
-
-## Güvenlik
-
-- CSRF Token koruması
-- SQL Injection koruması (EF Core)
-- XSS koruması (HTML encoding)
-- Rol bazlı yetkilendirme
-- Güvenli dosya yükleme
-
-## Performans
-
-- Lazy loading
-- Output caching
-- Image optimization
-- Minified CSS/JS
-- Database indexing
-
-## Production Deployment
-
-### IIS Deployment
-1. Publish projeyi:
-```bash
-dotnet publish -c Release -o ./publish
-```
-
-2. IIS'e deploy edin
-3. Connection string'i production SQL Server için güncelleyin
-
-### Docker (Opsiyonel)
-```dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-WORKDIR /app
-COPY publish/ .
-ENTRYPOINT ["dotnet", "CorporateCMS.dll"]
-```
+## Temizlik / Kullanılmayan Kod
+Servis katmanı kaldırıldı; tüm kontrolcümler doğrudan DbContext kullanıyor.
 
 ## Katkıda Bulunma
-
 1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit edin (`git commit -m 'Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing-feature`)
-5. Pull Request oluşturun
-
+2. Feature branch (`git checkout -b feature/slug-improvement`)
+3. Commit (`git commit -m "Add feature"`)
+4. Push (`git push origin feature/slug-improvement`)
+5. PR açın
 
 ---
-
-**Corporate CMS** - Modern, güvenli ve ölçeklenebilir içerik yönetim sistemi
-
-**Repository:** https://github.com/emirhankalkan/corporate-cms-dotnet  
-**Developer:** Emirhan Kalkan
+Corporate CMS – Modern, basit ve yönetilebilir içerik yönetim sistemi

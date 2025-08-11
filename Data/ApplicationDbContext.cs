@@ -4,7 +4,7 @@ using CorporateCMS.Models;
 
 namespace CorporateCMS.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -49,6 +49,7 @@ public class ApplicationDbContext : IdentityDbContext
         {
             entity.HasIndex(a => a.CreatedDate);
             entity.HasIndex(a => a.IsPinned);
+            entity.HasIndex(a => a.Slug).IsUnique(); // unique slug
             entity.Property(a => a.Content).HasColumnType("TEXT");
         });
     }

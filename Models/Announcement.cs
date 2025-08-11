@@ -9,6 +9,9 @@ public class Announcement
     [Required]
     [StringLength(200)]
     public string Title { get; set; } = string.Empty;
+
+    [StringLength(200)]
+    public string? Slug { get; set; } // new slug for SEO friendly URLs
     
     [StringLength(500)]
     public string? Summary { get; set; }
